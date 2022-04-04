@@ -1,3 +1,3 @@
-import Ship from './modules/Ship';
+import Ship from './factories/Ship';
 
 const body = document.querySelector('body');
