@@ -1,8 +1,9 @@
 import Ship from './Ship';
 
-test('Ship object creation', () => {
+test('Ship length and hits on creation', () => {
 	let ship = Ship(3);
-	expect(ship.getLength()).toEqual(3);
+	expect(ship.getLength()).toBe(3);
+	expect(ship.getHits()).toEqual([false, false, false]);
 });
 
 test('Ship hit method', () => {
@@ -12,9 +13,8 @@ test('Ship hit method', () => {
 });
 
 test('Ship isSunk method', () => {
-	let ship = Ship(2);
+	const ship = Ship(2);
 	ship.hit(0);
 	ship.hit(1);
-
 	expect(ship.isSunk()).toBe(true);
 });
