@@ -76,8 +76,8 @@ function Gameboard() {
 		totalShips += 1;
 	};
 
-	const receiveAttack = (x, y) => {
-		const cell = board[x][y];
+	const receiveAttack = (coordinates) => {
+		const cell = board[coordinates.x][coordinates.y];
 		cell.shotFired = true;
 
 		const ship = cell.ship;

@@ -55,7 +55,7 @@ test('Ship placement horizontal', () => {
 	}
 });
 
-test('Ship placement invalid catch', () => {
+test('Ship placement invalid - outside board', () => {
 	let board = Gameboard();
 	const testShip = Ship(15);
 	const x = 0;
@@ -63,6 +63,26 @@ test('Ship placement invalid catch', () => {
 	expect(() => {
 		board.placeShip({
 			ship: testShip,
+			coordinates: { x, y },
+			verticalAlignment: false,
+		});
+	}).toThrow(Error);
+});
+
+test('Ship placement invalid - existing ship', () => {
+	let board = Gameboard();
+	const testShip1 = Ship(2);
+	const testShip2 = Ship(2);
+	const x = 0;
+	const y = 0;
+	expect(() => {
+		board.placeShip({
+			ship: testShip1,
+			coordinates: { x, y },
+			verticalAlignment: false,
+		});
+		board.placeShip({
+			ship: testShip2,
 			coordinates: { x, y },
 			verticalAlignment: false,
 		});
@@ -79,7 +99,7 @@ test('Attack recieved', () => {
 		coordinates: { x, y },
 		verticalAlignment: false,
 	});
-	board.receiveAttack(x + 1, y);
+	board.receiveAttack({ x: x + 1, y });
 	// Check shot fired
 	expect(board.getBoard()[x + 1][y].shotFired).toBe(true);
 
@@ -98,7 +118,7 @@ test('All ships sunk reported', () => {
 		verticalAlignment: false,
 	});
 	for (let i = 0, shipLength = testShip.getLength(); i < shipLength; i++) {
-		board.receiveAttack(x + i, y);
+		board.receiveAttack({ x: x + i, y });
 	}
 
 	expect(board.allSunk()).toBe(true);
