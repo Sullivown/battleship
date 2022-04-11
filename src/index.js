@@ -1,3 +1,4 @@
-import Ship from './factories/Ship';
+import displayController from './modules/displayController';
+import './styles.css';
 
-const body = document.querySelector('body');
+document.addEventListener('DOMContentLoaded', displayController.init());
