@@ -8,25 +8,47 @@ function selectScreen() {
 	const titleDiv = document.createElement('div');
 	selectScreen.appendChild(titleDiv);
 
-	const p = document.createElement('p');
-	p.textContent = 'Player Select:';
-
-	selectScreen.appendChild(p);
-
 	const title = document.createElement('h1');
 	title.textContent = 'BattleShip';
 	titleDiv.appendChild(title);
 
-	selectScreen.appendChild(playerOptions());
+	const p = document.createElement('p');
+	p.textContent = 'Player Select:';
+	selectScreen.appendChild(p);
+
+	const form = document.createElement('form');
+	selectScreen.appendChild(form);
+	form.appendChild(playerOptions());
 
 	const controlsDiv = document.createElement('div');
-	selectScreen.appendChild(controlsDiv);
+	form.appendChild(controlsDiv);
 
 	const startButton = document.createElement('button');
 	startButton.textContent = 'Start Game';
+	startButton.type = 'button';
 	controlsDiv.append(startButton);
 
+	startButton.addEventListener('click', handleStartClicked);
 	return selectScreen;
+}
+
+function handleStartClicked(e) {
+	e.preventDefault();
+	const form = document.querySelector('form');
+	let data = {
+		player1: {
+			name: form.querySelector('#player-1-name').value,
+			type: form.querySelector('input[name="player-1-type"]:checked')
+				.value,
+		},
+		player2: {
+			name: form.querySelector('#player-2-name').value,
+			type: form.querySelector('input[name="player-2-type"]:checked')
+				.value,
+		},
+	};
+
+	console.log(data);
 }
 
 export default selectScreen;

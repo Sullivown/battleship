@@ -29,6 +29,7 @@ function playerOptions() {
 
 		if (i == 1) {
 			playerTypeA.setAttribute('checked', true);
+			radioDivA.classList.add('selected');
 		}
 
 		radioDivA.appendChild(playerTypeA);
@@ -55,6 +56,7 @@ function playerOptions() {
 
 		if (i == 2) {
 			playerTypeB.setAttribute('checked', true);
+			radioDivB.classList.add('selected');
 		}
 
 		radioDivB.appendChild(playerTypeB);
@@ -69,9 +71,22 @@ function playerOptions() {
 		playerTypeBLabel.appendChild(playerTypeBImg);
 
 		playerOptionsDiv.appendChild(playerSelectDiv);
+
+		radioDivA.addEventListener('click', select);
+		radioDivB.addEventListener('click', select);
 	}
 
 	return playerOptionsDiv;
+}
+
+function select(e) {
+	const typeDiv = e.target.closest('.type-div');
+	const currSelected = typeDiv.querySelector('.selected');
+	currSelected.classList.remove('selected');
+
+	const radioDiv = e.target.closest('.radio-div');
+	radioDiv.classList.add('selected');
+	radioDiv.querySelector('input[type="radio"]').checked = true;
 }
 
 export default playerOptions;
