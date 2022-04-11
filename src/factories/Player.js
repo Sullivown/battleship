@@ -2,7 +2,7 @@ function Player(name, type) {
 	const getName = () => name;
 	const getType = () => type;
 	let movesMade = [];
-	let board = null;
+	let board;
 
 	const validAttack = (coordinates) => {
 		const found = movesMade.find((element) => element == coordinates);

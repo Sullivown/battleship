@@ -56,5 +56,8 @@
 			"\\.(gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js",
 			"^config$": "<rootDir>/configs/app-config.js"
 		}
+	},
+	"dependencies": {
+		"pubsub-js": "^1.9.4"
 	}
 }
