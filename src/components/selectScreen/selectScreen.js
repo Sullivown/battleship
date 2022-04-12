@@ -1,16 +1,10 @@
+import PubSub from 'pubsub-js';
 import playerOptions from './playerOptions';
 import './selectScreen.css';
 
 function selectScreen() {
 	const selectScreen = document.createElement('div');
 	selectScreen.classList.add('select-screen');
-
-	const titleDiv = document.createElement('div');
-	selectScreen.appendChild(titleDiv);
-
-	const title = document.createElement('h1');
-	title.textContent = 'BattleShip';
-	titleDiv.appendChild(title);
 
 	const p = document.createElement('p');
 	p.textContent = 'Player Select:';
@@ -48,7 +42,7 @@ function handleStartClicked(e) {
 		},
 	};
 
-	console.log(data);
+	PubSub.publish('CREATE NEW GAME', data);
 }
 
 export default selectScreen;

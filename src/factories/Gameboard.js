@@ -1,5 +1,4 @@
-function Gameboard() {
-	const BOARD_SIZE = 10;
+function Gameboard(boardSize) {
 	let board = initBoard();
 	let totalShips = 0;
 	let sunkShips = 0;
@@ -7,9 +6,9 @@ function Gameboard() {
 	// Board initialize function
 	function initBoard() {
 		let newBoard = [];
-		for (let i = 0; i < BOARD_SIZE; i++) {
+		for (let i = 0; i < boardSize; i++) {
 			newBoard.push([]);
-			for (let j = 0; j < BOARD_SIZE; j++) {
+			for (let j = 0; j < boardSize; j++) {
 				newBoard[i].push([]);
 				newBoard[i][j] = {
 					shotFired: false,
@@ -28,11 +27,11 @@ function Gameboard() {
 
 		// Check board positions are valid for ship size
 		if (!placement.verticalAlignment) {
-			if (x + shipLength > BOARD_SIZE) {
+			if (x + shipLength > boardSize) {
 				return false;
 			}
 		} else {
-			if (y + shipLength > BOARD_SIZE) {
+			if (y + shipLength > boardSize) {
 				return false;
 			}
 		}

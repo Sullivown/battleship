@@ -15,7 +15,7 @@ test('Make attack - human', () => {
 	const attackCoordsX = 0;
 	const attackCoordsY = 0;
 
-	player2.board = Gameboard();
+	player2.board = Gameboard(10);
 
 	const testShip = Ship(5);
 	player2.board.placeShip({
@@ -37,7 +37,7 @@ test('Make attack - computer', () => {
 	const attackCoords = player1.getAIMove(10);
 	const testShip = Ship(1);
 
-	player2.board = Gameboard();
+	player2.board = Gameboard(10);
 	player2.board.placeShip({
 		ship: testShip,
 		coordinates: { x: attackCoords.x, y: attackCoords.y },

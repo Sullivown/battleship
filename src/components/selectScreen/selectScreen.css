@@ -1,7 +1,6 @@
 .select-screen {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 }
 
@@ -11,43 +10,19 @@ form {
 	align-items: center;
 }
 
-.player-options {
-	display: flex;
-	flex-direction: row;
-	gap: 1rem;
-	padding: 1.5rem;
-	justify-content: center;
-	flex-wrap: wrap;
-}
-
 .player-select {
-	display: flex;
-	flex-direction: column;
 	border: 1px solid black;
 	border-radius: 1rem;
-	padding: 1.5rem;
-	gap: 1rem;
 }
 
 .type-div {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	gap: 1rem;
+	flex-wrap: nowrap;
 }
 
 .radio-div {
-	display: flex;
 	width: 50%;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	justify-content: center;
-	padding: 1rem;
 	border: 1px solid black;
 	border-radius: 1rem;
-	gap: 1rem;
 	cursor: pointer;
 	transition: all 0.2s ease-in-out;
 	opacity: 0.5;
