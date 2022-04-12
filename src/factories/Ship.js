@@ -1,5 +1,6 @@
-function Ship(length) {
+function Ship(id, length) {
 	let hits = initHits();
+	const getId = () => id;
 	const getLength = () => length;
 	const getHits = () => hits;
 
@@ -32,6 +33,7 @@ function Ship(length) {
 	};
 
 	return {
+		getId,
 		getLength,
 		getHits,
 		hit,

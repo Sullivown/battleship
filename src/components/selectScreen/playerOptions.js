@@ -7,8 +7,7 @@ function playerOptions() {
 
 	for (let i = 1; i <= 2; i++) {
 		const playerSelectDiv = document.createElement('div');
-		playerSelectDiv.classList.add('flex-column');
-		playerSelectDiv.classList.add('player-select');
+		playerSelectDiv.classList.add('flex-column', 'player-select');
 
 		const playerNameInput = document.createElement('input');
 		playerNameInput.setAttribute('id', `player-${i}-name`);
@@ -16,8 +15,7 @@ function playerOptions() {
 		playerSelectDiv.appendChild(playerNameInput);
 
 		const typeDiv = document.createElement('div');
-		typeDiv.classList.add('flex-row');
-		typeDiv.classList.add('type-div');
+		typeDiv.classList.add('flex-row', 'type-div');
 		playerSelectDiv.appendChild(typeDiv);
 
 		typeDiv.appendChild(playerType(i, 'human'));

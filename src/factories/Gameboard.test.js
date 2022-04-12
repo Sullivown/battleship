@@ -22,7 +22,7 @@ describe('Gameboard initializer', () => {
 	});
 
 	test('Ship placement vertical', () => {
-		const testShip = Ship(3);
+		const testShip = Ship(0, 3);
 		const x = 1;
 		const y = 3;
 
@@ -45,7 +45,7 @@ describe('Gameboard initializer', () => {
 	});
 
 	test('Ship placement horizontal', () => {
-		const testShip = Ship(5);
+		const testShip = Ship(0, 5);
 		const x = 3;
 		const y = 0;
 		board.placeShip({
@@ -67,7 +67,7 @@ describe('Gameboard initializer', () => {
 	});
 
 	test('Ship placement invalid - outside board', () => {
-		const testShip = Ship(15);
+		const testShip = Ship(0, 15);
 		const x = 0;
 		const y = 0;
 		expect(() => {
@@ -80,8 +80,8 @@ describe('Gameboard initializer', () => {
 	});
 
 	test('Ship placement invalid - existing ship', () => {
-		const testShip1 = Ship(2);
-		const testShip2 = Ship(2);
+		const testShip1 = Ship(0, 2);
+		const testShip2 = Ship(1, 2);
 		const x = 0;
 		const y = 0;
 		expect(() => {
@@ -99,7 +99,7 @@ describe('Gameboard initializer', () => {
 	});
 
 	test('Attack recieved', () => {
-		const testShip = Ship(5);
+		const testShip = Ship(0, 5);
 		const x = 0;
 		const y = 0;
 		board.placeShip({
@@ -116,7 +116,7 @@ describe('Gameboard initializer', () => {
 	});
 
 	test('All ships sunk reported', () => {
-		const testShip = Ship(5);
+		const testShip = Ship(0, 5);
 		const x = 0;
 		const y = 0;
 		board.placeShip({

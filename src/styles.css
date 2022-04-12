@@ -3,6 +3,7 @@ body {
 	margin: 0;
 	width: 100vw;
 	height: 100vh;
+	font-family: sans-serif;
 }
 
 header {
@@ -36,4 +37,13 @@ header {
 
 .flex-wrap {
 	flex-wrap: wrap;
+}
+
+.ship {
+	background-color: grey;
+	border: 1px solid black;
+}
+
+.shotFired {
+	color: red;
 }

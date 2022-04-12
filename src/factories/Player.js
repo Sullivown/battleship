@@ -1,8 +1,9 @@
-function Player(name, type) {
+function Player(name, type, ships) {
 	const getName = () => name;
 	const getType = () => type;
 	let movesMade = [];
 	let board;
+	let shipyard;
 
 	const validAttack = (coordinates) => {
 		const found = movesMade.find((element) => element == coordinates);
@@ -45,6 +46,7 @@ function Player(name, type) {
 		attack,
 		getAIMove,
 		board,
+		shipyard,
 	};
 }
 

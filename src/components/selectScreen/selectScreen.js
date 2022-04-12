@@ -11,6 +11,7 @@ function selectScreen() {
 	selectScreen.appendChild(p);
 
 	const form = document.createElement('form');
+	form.classList.add('flex-column');
 	selectScreen.appendChild(form);
 	form.appendChild(playerOptions());
 
@@ -31,12 +32,12 @@ function handleStartClicked(e) {
 	const form = document.querySelector('form');
 	let data = {
 		player1: {
-			name: form.querySelector('#player-1-name').value,
+			name: form.querySelector('#player-1-name').value || 'Player 1',
 			type: form.querySelector('input[name="player-1-type"]:checked')
 				.value,
 		},
 		player2: {
-			name: form.querySelector('#player-2-name').value,
+			name: form.querySelector('#player-2-name').value || 'Player 2',
 			type: form.querySelector('input[name="player-2-type"]:checked')
 				.value,
 		},

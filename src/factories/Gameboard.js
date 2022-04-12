@@ -22,6 +22,9 @@ function Gameboard(boardSize) {
 	const getBoard = () => board;
 
 	const validatePlacement = (placement) => {
+		console.log(placement.coordinates);
+		console.log(placement.ship.getLength());
+		console.log(placement.verticalAlignment);
 		let { x, y } = placement.coordinates;
 		const shipLength = placement.ship.getLength();
 

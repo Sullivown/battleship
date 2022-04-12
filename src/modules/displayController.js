@@ -5,7 +5,6 @@ const displayController = (() => {
 	// DOM cache
 	const body = document.querySelector('body');
 	let app;
-	let messageBox;
 
 	const init = () => {
 		const header = document.createElement('header');
@@ -29,9 +28,9 @@ const displayController = (() => {
 		app.appendChild(selectScreen());
 	};
 
-	const renderPlacement = () => {
+	const renderPlacement = (player) => {
 		app.innerHTML = '';
-		app.appendChild(placementScreen());
+		app.appendChild(placementScreen(player));
 	};
 
 	const renderBattle = () => {};
@@ -45,7 +44,7 @@ const displayController = (() => {
 			renderSelectScreen();
 		}
 		if (gameStage == 'placement') {
-			renderPlacement();
+			renderPlacement(currentPlayer);
 		}
 	});
 	return {

@@ -3,14 +3,13 @@ import RobotPic from '../../assets/images/robot.svg';
 
 function playerType(i, type) {
 	const radioDiv = document.createElement('div');
-	radioDiv.classList.add('flex-column');
-	radioDiv.classList.add('radio-div');
+	radioDiv.classList.add('flex-column', 'radio-div');
 
 	const playerType = document.createElement('input');
 	playerType.setAttribute('type', 'radio');
 	playerType.setAttribute('name', `player-${i}-type`);
-	playerType.setAttribute('id', `player-${i}-human`);
-	playerType.setAttribute('value', 'human');
+	playerType.setAttribute('id', `player-${i}-${type}`);
+	playerType.setAttribute('value', type);
 
 	if (type == 'human') {
 		playerType.setAttribute('checked', true);
@@ -19,15 +18,15 @@ function playerType(i, type) {
 
 	radioDiv.appendChild(playerType);
 
+	const playerTypeImg = new Image();
+	playerTypeImg.src = type == 'human' ? HumanPic : RobotPic;
+	playerTypeImg.setAttribute('for', `player-${i}-${type}`);
+	radioDiv.appendChild(playerTypeImg);
+
 	const playerTypeLabel = document.createElement('label');
 	playerTypeLabel.textContent = type == 'human' ? 'Human' : 'AI';
 	playerTypeLabel.setAttribute('for', `player-${i}-${type}`);
 	radioDiv.appendChild(playerTypeLabel);
-
-	const playerTypeImg = new Image();
-	playerTypeImg.src = type == 'human' ? HumanPic : RobotPic;
-	playerTypeImg.setAttribute('for', `player-${i}-${type}`);
-	playerTypeLabel.appendChild(playerTypeImg);
 
 	radioDiv.addEventListener('click', select);
 

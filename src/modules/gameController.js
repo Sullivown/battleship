@@ -2,9 +2,12 @@ import PubSub from 'pubsub-js';
 import Gameboard from '../factories/Gameboard';
 import Player from '../factories/Player';
 import Ship from '../factories/Ship';
+import shipIdGenerator from '../helpers/shipIdGenerator';
 
 const gameController = (() => {
 	const BOARD_SIZE = 10;
+	const SHIPS = [2, 3, 3, 4, 5];
+	let shipid = 0;
 	let player1;
 	let player2;
 	let currentPlayer;
@@ -14,12 +17,24 @@ const gameController = (() => {
 		return { player1, player2, currentPlayer, gameStage };
 	};
 
+	const createShipyard = (ships) => {
+		let shipyard = [];
+		for (let ship of ships) {
+			const id = shipIdGenerator();
+			shipyard.push(Ship(id, ship));
+		}
+		return shipyard;
+	};
+
 	const createNewGame = (params) => {
 		player1 = Player(params.player1.name, params.player1.type);
 		player2 = Player(params.player2.name, params.player2.type);
 
 		player1.board = Gameboard(BOARD_SIZE);
 		player2.board = Gameboard(BOARD_SIZE);
+
+		player1.shipyard = createShipyard(SHIPS);
+		player2.shipyard = createShipyard(SHIPS);
 
 		currentPlayer = player1;
 	};
@@ -55,7 +70,27 @@ const gameController = (() => {
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 
-	return { createNewGame, getGameState, gameOverCheck };
+	PubSub.subscribe('PLACE SHIP', (msg, data) => {
+		const currentShip = currentPlayer.shipyard.find(
+			(element) => element.getId() == data.shipId
+		);
+
+		const index = currentPlayer.shipyard.findIndex(
+			(element) => (element.id = data.ship)
+		);
+		// Place ship on board
+		currentPlayer.board.placeShip({
+			ship: currentShip,
+			coordinates: data.coordinates,
+			verticalAlignment: data.verticalAlignment,
+		});
+		// Remove ship from player shipyard
+		currentPlayer.shipyard.splice(index, 1);
+
+		PubSub.publish('GAME STATE CHANGED', getGameState());
+	});
+
+	return { createShipyard, createNewGame, getGameState, gameOverCheck };
 })();
 
 export default gameController;
