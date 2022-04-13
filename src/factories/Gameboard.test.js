@@ -7,7 +7,7 @@ describe('Gameboard initializer', () => {
 		board = Gameboard(10);
 	});
 
-	test.only('Gameboard Creation', () => {
+	test('Gameboard Creation', () => {
 		let testBoard = [[], [], [], [], [], [], [], [], [], []];
 
 		testBoard.forEach((element) => {
@@ -42,7 +42,6 @@ describe('Gameboard initializer', () => {
 				shipSection: i,
 			});
 		}
-		console.log(board.getBoard());
 	});
 
 	test('Ship placement horizontal', () => {
@@ -108,9 +107,9 @@ describe('Gameboard initializer', () => {
 			coordinates: { x, y },
 			verticalAlignment: false,
 		});
-		board.receiveAttack({ x: x + 1, y });
+		board.receiveAttack({ x, y: y + 1 });
 		// Check shot fired
-		expect(board.getBoard()[x + 1][y].shotFired).toBe(true);
+		expect(board.getBoard()[x][y + 1].shotFired).toBe(true);
 
 		// Check attack recieved on ship
 		expect(board.getBoard()[x][y].ship.getHits()[1]).toBe(true);
@@ -130,7 +129,7 @@ describe('Gameboard initializer', () => {
 			i < shipLength;
 			i++
 		) {
-			board.receiveAttack({ x: x + i, y });
+			board.receiveAttack({ x, y: y + i });
 		}
 
 		expect(board.allSunk()).toBe(true);

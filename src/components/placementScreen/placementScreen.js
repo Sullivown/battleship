@@ -44,7 +44,10 @@ PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
 			if (selectedShip) {
 				const placement = {
 					shipId: selectedShip,
-					coordinates: { x: cell.dataset.x, y: cell.dataset.y },
+					coordinates: {
+						x: parseInt(cell.dataset.x),
+						y: parseInt(cell.dataset.y),
+					},
 					verticalAlignment: false,
 				};
 				placeShip(placement);

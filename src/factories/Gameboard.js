@@ -23,7 +23,6 @@ function Gameboard(boardSize) {
 	const getBoard = () => board;
 
 	const validatePlacement = (placement) => {
-		console.log(placement);
 		let { x, y } = placement.coordinates;
 		const shipLength = placement.ship.getLength();
 
@@ -40,6 +39,8 @@ function Gameboard(boardSize) {
 
 		// Check all spaces are empty
 		for (let i = 0; i < shipLength; i++) {
+			if (board[x][y] == undefined) {
+			}
 			if (board[x][y].ship) {
 				return false;
 			}
