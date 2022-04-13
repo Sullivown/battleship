@@ -7,7 +7,7 @@ describe('Gameboard initializer', () => {
 		board = Gameboard(10);
 	});
 
-	test('Gameboard Creation', () => {
+	test.only('Gameboard Creation', () => {
 		let testBoard = [[], [], [], [], [], [], [], [], [], []];
 
 		testBoard.forEach((element) => {
@@ -36,12 +36,13 @@ describe('Gameboard initializer', () => {
 			i < shipLength;
 			i++
 		) {
-			expect(board.getBoard()[x][y + i]).toEqual({
+			expect(board.getBoard()[x + i][y]).toEqual({
 				shotFired: false,
 				ship: testShip,
 				shipSection: i,
 			});
 		}
+		console.log(board.getBoard());
 	});
 
 	test('Ship placement horizontal', () => {
@@ -58,7 +59,7 @@ describe('Gameboard initializer', () => {
 			i < shipLength;
 			i++
 		) {
-			expect(board.getBoard()[x + i][y]).toEqual({
+			expect(board.getBoard()[x][y + i]).toEqual({
 				shotFired: false,
 				ship: testShip,
 				shipSection: i,

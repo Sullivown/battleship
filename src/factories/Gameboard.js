@@ -4,6 +4,7 @@ function Gameboard(boardSize) {
 	let sunkShips = 0;
 
 	// Board initialize function
+	// X(i)represents rows, Y(j) represents columns
 	function initBoard() {
 		let newBoard = [];
 		for (let i = 0; i < boardSize; i++) {
@@ -22,9 +23,7 @@ function Gameboard(boardSize) {
 	const getBoard = () => board;
 
 	const validatePlacement = (placement) => {
-		console.log(placement.coordinates);
-		console.log(placement.ship.getLength());
-		console.log(placement.verticalAlignment);
+		console.log(placement);
 		let { x, y } = placement.coordinates;
 		const shipLength = placement.ship.getLength();
 
@@ -45,9 +44,9 @@ function Gameboard(boardSize) {
 				return false;
 			}
 			if (placement.verticalAlignment) {
-				y += 1;
-			} else {
 				x += 1;
+			} else {
+				y += 1;
 			}
 		}
 
@@ -69,9 +68,9 @@ function Gameboard(boardSize) {
 			board[x][y].ship = placement.ship;
 			board[x][y].shipSection = i;
 			if (placement.verticalAlignment) {
-				y += 1;
-			} else {
 				x += 1;
+			} else {
+				y += 1;
 			}
 		}
 

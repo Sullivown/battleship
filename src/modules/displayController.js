@@ -45,6 +45,7 @@ const displayController = (() => {
 		}
 		if (gameStage == 'placement') {
 			renderPlacement(currentPlayer);
+			PubSub.publish('PLACEMENT BOARD RENDERED');
 		}
 	});
 	return {

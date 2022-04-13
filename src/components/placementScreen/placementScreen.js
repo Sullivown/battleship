@@ -2,6 +2,8 @@ import board from '../board/board';
 import shipyard from './shipyard';
 import './placementScreen.css';
 
+let selectedShip = null;
+
 function placementScreen(player) {
 	const playerName = player.getName();
 	const playerBoardState = player.board.getBoard();
@@ -28,21 +30,32 @@ function placementScreen(player) {
 	startButton.type = 'button';
 	startButton.textContent = 'To Battle!';
 
-	startButton.addEventListener('click', () => {
-		const placement = {
-			shipId: 0,
-			coordinates: { x: 0, y: 0 },
-			verticalAlignment: false,
-		};
-		placeShip(placement);
-	});
+	startButton.addEventListener('click', (e) => {});
 
 	placementScreen.appendChild(startButton);
 
-	// FOR NOW place ships at pre determined places
-
 	return placementScreen;
 }
+
+PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
+	const cells = document.querySelectorAll('.cell');
+	cells.forEach((cell) => {
+		cell.addEventListener('click', () => {
+			if (selectedShip) {
+				const placement = {
+					shipId: selectedShip,
+					coordinates: { x: cell.dataset.x, y: cell.dataset.y },
+					verticalAlignment: false,
+				};
+				placeShip(placement);
+			}
+		});
+	});
+});
+
+PubSub.subscribe('SHIP SELECTED PLACEMENT', (msg, data) => {
+	selectedShip = data.selectedShip;
+});
 
 function placeShip(placement) {
 	PubSub.publish('PLACE SHIP', placement);

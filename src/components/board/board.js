@@ -4,10 +4,11 @@ function board(boardState) {
 	for (let i = 0; i < boardState.length; i++) {
 		for (let j = 0; j < boardState[i].length; j++) {
 			const cell = document.createElement('div');
-			cell.dataset.x = j;
-			cell.dataset.y = i;
+			cell.dataset.x = i;
+			cell.dataset.y = j;
 			cell.classList.add('cell');
-			if (boardState[i][j].ship == true) {
+
+			if (boardState[i][j].ship) {
 				cell.classList.add('ship');
 			}
 

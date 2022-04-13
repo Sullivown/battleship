@@ -1,3 +1,5 @@
+let selectedShip = null;
+
 function shipyard(ships) {
 	const shipyard = document.createElement('div');
 	shipyard.classList.add('shipyard');
@@ -7,6 +9,7 @@ function shipyard(ships) {
 		shipDiv.classList.add('ship');
 		shipDiv.dataset.shipid = ships[ship].getId();
 		shipyard.appendChild(shipDiv);
+		shipDiv.addEventListener('click', selectShip);
 
 		for (let i = 0; i < shiplength; i++) {
 			const shipSection = document.createElement('div');
@@ -17,6 +20,20 @@ function shipyard(ships) {
 	}
 
 	return shipyard;
+}
+
+function selectShip() {
+	const currSelected = document.querySelector('.ship-selected');
+	if (currSelected) {
+		currSelected.classList.remove('ship-selected');
+	}
+
+	selectedShip = this.dataset.shipid;
+	document
+		.querySelector(`[data-shipid='${selectedShip}']`)
+		.classList.add('ship-selected');
+
+	PubSub.publish('SHIP SELECTED PLACEMENT', { selectedShip });
 }
 
 export default shipyard;
