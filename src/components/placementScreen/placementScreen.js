@@ -37,12 +37,25 @@ function placementScreen(player) {
 }
 
 PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
+	addCellListeners();
+	addShipListeners();
+});
+
+PubSub.subscribe('INVALID SHIP PLACEMENT', (msg, data) => {
+	const msgBox = document.querySelector('#msgbox');
+	msgBox.textContent = 'Invalid Ship Placement!';
+	msgBox.classList.add('warning-message');
+});
+
+function addCellListeners() {
 	const cells = document.querySelectorAll('.cell');
 	cells.forEach((cell) => {
-		cell.addEventListener('click', () => {
-			if (selectedShip) {
+		cell.addEventListener('click', (e) => {
+			if (cell.classList.contains('ship-section')) {
+				return;
+			} else if (selectedShip) {
 				const placement = {
-					shipId: selectedShip,
+					shipId: parseInt(selectedShip),
 					coordinates: {
 						x: parseInt(cell.dataset.x),
 						y: parseInt(cell.dataset.y),
@@ -53,17 +66,30 @@ PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
 			}
 		});
 	});
-});
+}
 
-PubSub.subscribe('SHIP SELECTED PLACEMENT', (msg, data) => {
-	selectedShip = data.selectedShip;
-});
+function addShipListeners() {
+	const ships = document.querySelectorAll('.ship-section');
+	ships.forEach((ship) => {
+		ship.addEventListener('click', selectShip);
+	});
+}
 
-PubSub.subscribe('INVALID SHIP PLACEMENT', (msg, data) => {
-	const msgBox = document.querySelector('#msgbox');
-	msgBox.textContent = 'Invalid Ship Placement!';
-	msgBox.classList.add('warning-message');
-});
+function selectShip(e) {
+	const currSelected = document.querySelectorAll('.ship-selected');
+	if (currSelected) {
+		currSelected.forEach((section) => {
+			section.classList.remove('ship-selected');
+		});
+	}
+	selectedShip = e.target.dataset.shipid;
+	console.log('selected ship:' + selectedShip);
+	document
+		.querySelectorAll(`.ship-section[data-shipid='${selectedShip}']`)
+		.forEach((section) => {
+			section.classList.add('ship-selected');
+		});
+}
 
 function placeShip(placement) {
 	PubSub.publish('PLACE SHIP', placement);

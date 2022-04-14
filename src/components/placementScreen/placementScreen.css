@@ -26,17 +26,6 @@
 	padding: 1rem;
 }
 
-.ship {
-	display: flex;
-	flex-direction: row;
-}
-
-.ship-section {
-	display: inline-block;
-	width: 3rem;
-	height: 3rem;
-}
-
 .ship-selected {
-	border: 2px dashed red;
+	border: 2px dashed greenyellow;
 }

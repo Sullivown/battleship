@@ -50,8 +50,16 @@ header {
 	flex-wrap: wrap;
 }
 
-.ship {
+.ship-outline {
+	display: flex;
+	flex-direction: row;
+}
+
+.ship-section {
+	display: inline-block;
 	background-color: grey;
+	width: 3rem;
+	height: 3rem;
 }
 
 .shotFired {

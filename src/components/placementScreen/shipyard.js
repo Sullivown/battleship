@@ -7,18 +7,20 @@ function shipyard(ships) {
 	shipyardDiv.appendChild(shipyard);
 	shipyard.classList.add('shipyard');
 	for (let ship in ships) {
-		const shiplength = ships[ship].getLength();
-		const shipDiv = document.createElement('div');
-		shipDiv.classList.add('ship');
-		shipDiv.dataset.shipid = ships[ship].getId();
-		shipyard.appendChild(shipDiv);
-		shipDiv.addEventListener('click', selectShip);
+		if (ships[ship] != null) {
+			const shiplength = ships[ship].getLength();
+			const shipDiv = document.createElement('div');
+			shipDiv.classList.add('ship-outline');
+			shipDiv.dataset.shipid = ships[ship].getId();
+			shipyard.appendChild(shipDiv);
 
-		for (let i = 0; i < shiplength; i++) {
-			const shipSection = document.createElement('div');
-			shipSection.classList.add('ship-section');
-			shipSection.dataset.section = i;
-			shipDiv.appendChild(shipSection);
+			for (let i = 0; i < shiplength; i++) {
+				const shipSection = document.createElement('div');
+				shipSection.classList.add('ship-section');
+				shipSection.dataset.section = i;
+				shipSection.dataset.shipid = ships[ship].getId();
+				shipDiv.appendChild(shipSection);
+			}
 		}
 	}
 
