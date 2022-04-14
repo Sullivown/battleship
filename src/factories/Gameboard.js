@@ -27,7 +27,7 @@ function Gameboard(boardSize) {
 		const shipLength = placement.ship.getLength();
 
 		// Check board positions are valid for ship size
-		if (!placement.verticalAlignment) {
+		if (placement.verticalAlignment) {
 			if (x + shipLength > boardSize) {
 				return false;
 			}
@@ -40,6 +40,7 @@ function Gameboard(boardSize) {
 		// Check all spaces are empty
 		for (let i = 0; i < shipLength; i++) {
 			if (board[x][y] == undefined) {
+				return false;
 			}
 			if (board[x][y].ship) {
 				return false;
@@ -58,6 +59,7 @@ function Gameboard(boardSize) {
 		let { x, y } = placement.coordinates;
 
 		if (!validatePlacement(placement)) {
+			PubSub.publish('INVALID SHIP PLACEMENT');
 			throw new Error('Ship placement invalid!');
 		}
 

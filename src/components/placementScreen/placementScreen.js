@@ -14,11 +14,12 @@ function placementScreen(player) {
 
 	const msgBox = document.createElement('div');
 	msgBox.setAttribute('id', 'msgbox');
+	msgBox.classList.add('flex-row');
 	msgBox.textContent = `${playerName}, place your fleet!`;
 	placementScreen.appendChild(msgBox);
 
 	const boardsDiv = document.createElement('div');
-	boardsDiv.classList.add('flex-row', 'wrap');
+	boardsDiv.classList.add('flex-row', 'wrap', 'boards-div');
 	placementScreen.appendChild(boardsDiv);
 
 	const playerBoard = board(playerBoardState);
@@ -58,6 +59,12 @@ PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
 
 PubSub.subscribe('SHIP SELECTED PLACEMENT', (msg, data) => {
 	selectedShip = data.selectedShip;
+});
+
+PubSub.subscribe('INVALID SHIP PLACEMENT', (msg, data) => {
+	const msgBox = document.querySelector('#msgbox');
+	msgBox.textContent = 'Invalid Ship Placement!';
+	msgBox.classList.add('warning-message');
 });
 
 function placeShip(placement) {

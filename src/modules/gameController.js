@@ -76,7 +76,7 @@ const gameController = (() => {
 		);
 
 		const index = currentPlayer.shipyard.findIndex(
-			(element) => (element.id = data.ship)
+			(element) => element.id == data.ship
 		);
 		// Place ship on board
 		currentPlayer.board.placeShip({
