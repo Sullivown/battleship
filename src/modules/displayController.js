@@ -5,6 +5,8 @@ const displayController = (() => {
 	// DOM cache
 	const body = document.querySelector('body');
 	let app;
+	let msgBox;
+	let gameArea;
 
 	const init = () => {
 		const header = document.createElement('header');
@@ -16,21 +18,38 @@ const displayController = (() => {
 
 		const appDiv = document.createElement('div');
 		appDiv.setAttribute('id', 'app');
+		appDiv.classList.add('flex-column');
 		body.appendChild(appDiv);
 
-		app = document.querySelector('#app');
+		const msgBoxDiv = document.createElement('div');
+		msgBoxDiv.setAttribute('id', 'msgbox');
+		msgBoxDiv.classList.add('flex-row');
+		appDiv.appendChild(msgBoxDiv);
+
+		const gameAreaDiv = document.createElement('div');
+		gameAreaDiv.setAttribute('id', 'game-area');
+		gameAreaDiv.classList.add('flex-row');
+		appDiv.appendChild(gameAreaDiv);
+
+		cacheDOM();
 
 		renderSelectScreen();
 	};
 
+	const cacheDOM = () => {
+		app = document.querySelector('#app');
+		msgBox = document.querySelector('#msgbox');
+		gameArea = document.querySelector('#game-area');
+	};
+
 	const renderSelectScreen = () => {
-		app.innerHTML = '';
-		app.appendChild(selectScreen());
+		gameArea.innerHTML = '';
+		gameArea.appendChild(selectScreen());
 	};
 
 	const renderPlacement = (player) => {
-		app.innerHTML = '';
-		app.appendChild(placementScreen(player));
+		gameArea.innerHTML = '';
+		gameArea.appendChild(placementScreen(player));
 	};
 
 	const renderBattle = () => {};

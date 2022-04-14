@@ -9,14 +9,12 @@ function placementScreen(player) {
 	const playerBoardState = player.board.getBoard();
 	const playerShipyard = player.shipyard;
 
+	const msgBox = document.querySelector('#msgbox');
+	msgBox.classList.remove('warning-message');
+	msgBox.textContent = `${playerName}, place your fleet!`;
+
 	const placementScreen = document.createElement('div');
 	placementScreen.classList.add('flex-column');
-
-	const msgBox = document.createElement('div');
-	msgBox.setAttribute('id', 'msgbox');
-	msgBox.classList.add('flex-row');
-	msgBox.textContent = `${playerName}, place your fleet!`;
-	placementScreen.appendChild(msgBox);
 
 	const boardsDiv = document.createElement('div');
 	boardsDiv.classList.add('flex-row', 'wrap', 'boards-div');

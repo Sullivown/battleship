@@ -3,12 +3,10 @@ import playerOptions from './playerOptions';
 import './selectScreen.css';
 
 function selectScreen() {
+	document.querySelector('#msgbox').textContent =
+		'Game setup: select players';
 	const selectScreen = document.createElement('div');
 	selectScreen.classList.add('select-screen');
-
-	const p = document.createElement('p');
-	p.textContent = 'Player Select:';
-	selectScreen.appendChild(p);
 
 	const form = document.createElement('form');
 	form.classList.add('flex-column');
