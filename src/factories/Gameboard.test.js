@@ -134,4 +134,21 @@ describe('Gameboard initializer', () => {
 
 		expect(board.allSunk()).toBe(true);
 	});
+
+	test('Remove ship from board', () => {
+		const ship1 = Ship(0, 3);
+		const x = 0;
+		const y = 0;
+		const coordinates = { x, y };
+		board.placeShip({
+			ship: ship1,
+			coordinates: { x, y },
+			verticalAlignment: false,
+		});
+
+		board.removeShip(ship1);
+		expect(board.getBoard()[0][0].ship).toBe(null);
+		expect(board.getBoard()[0][1].ship).toBe(null);
+		expect(board.getBoard()[0][3].ship).toBe(null);
+	});
 });

@@ -3,6 +3,7 @@ import Gameboard from '../factories/Gameboard';
 import Player from '../factories/Player';
 import Ship from '../factories/Ship';
 import shipIdGenerator from '../helpers/shipIdGenerator';
+import getShipFromDisplayId from '../helpers/getShipFromDisplayId';
 
 const gameController = (() => {
 	const BOARD_SIZE = 10;
@@ -71,41 +72,23 @@ const gameController = (() => {
 
 	PubSub.subscribe('PLACE SHIP', (msg, data) => {
 		console.log(data);
-		let currentShip;
-		let index;
 
 		// find ship in shipyard OR on board
-		currentShip = currentPlayer.shipyard.find((element) => {
-			if (element != null) {
-				return element.getId() == data.shipId;
-			}
-		});
-
-		if (currentShip != -1) {
-			index = currentPlayer.shipyard.findIndex((element) => {
-				if (element != null) {
-					return element.getId() == data.shipId;
-				}
-			});
-		} else {
-			currentBoard = currentPlayer.board.getBoard();
-
-			currentShip = currentBoard.find((element) => {
-				if (element.ship != null) {
-					return element.ship.getId() == data.shipId;
-				}
-			});
-		}
+		const { ship, location, shipyardIndex } = getShipFromDisplayId(
+			data.shipId,
+			currentPlayer.board.getBoard(),
+			currentPlayer.shipyard
+		);
 
 		// Place ship on board
-		console.log('current ship: ' + currentShip.getId());
+		console.log('current ship: ' + ship.getId());
 		currentPlayer.board.placeShip({
-			ship: currentShip,
+			ship: ship,
 			coordinates: data.coordinates,
 			verticalAlignment: data.verticalAlignment,
 		});
 		// Remove ship from player shipyard
-		currentPlayer.shipyard[index] = null;
+		currentPlayer.shipyard[shipyardIndex] = null;
 
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});

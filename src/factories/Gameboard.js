@@ -23,6 +23,7 @@ function Gameboard(boardSize) {
 	const getBoard = () => board;
 
 	const validatePlacement = (placement) => {
+		// Placement obj contains coordinates (x, y) obj, ship and vertical alignment
 		let { x, y } = placement.coordinates;
 		const shipLength = placement.ship.getLength();
 
@@ -63,6 +64,8 @@ function Gameboard(boardSize) {
 			throw new Error('Ship placement invalid!');
 		}
 
+		removeShip(placement.ship);
+
 		for (
 			let i = 0, shipLength = placement.ship.getLength();
 			i < shipLength;
@@ -78,6 +81,18 @@ function Gameboard(boardSize) {
 		}
 
 		totalShips += 1;
+	};
+
+	const removeShip = (ship) => {
+		for (let i = 0, boardSize = board.length; i < boardSize; i++) {
+			for (let j = 0, boardSize = board.length; j < boardSize; j++) {
+				if (board[i][j].ship == ship) {
+					console.log('ship found');
+					board[i][j].ship = null;
+					console.log('ship removed, cell.ship: ' + board[i][j].ship);
+				}
+			}
+		}
 	};
 
 	const receiveAttack = (coordinates) => {
@@ -104,6 +119,7 @@ function Gameboard(boardSize) {
 		getBoard,
 		validatePlacement,
 		placeShip,
+		removeShip,
 		receiveAttack,
 		allSunk,
 	};
