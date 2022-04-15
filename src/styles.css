@@ -62,6 +62,9 @@ header {
 	height: 3rem;
 }
 
+.ship-forward {
+}
+
 .shotFired {
 	color: red;
 }

@@ -11,6 +11,15 @@ function board(boardState) {
 			if (boardState[i][j].ship) {
 				cell.dataset.shipid = boardState[i][j].ship.getId();
 				cell.classList.add('ship-section');
+				if (boardState[i][j].shipSection == 0) {
+					cell.classList.add('ship-forward');
+				}
+				if (
+					boardState[i][j].shipSection ==
+					boardState[i][j].ship.getLength() - 1
+				) {
+					cell.classList.add('ship-aft');
+				}
 			}
 
 			if (boardState[i][j].shotFired == true) {
