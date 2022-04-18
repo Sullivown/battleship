@@ -71,8 +71,6 @@ const gameController = (() => {
 	});
 
 	PubSub.subscribe('PLACE SHIP', (msg, data) => {
-		console.log(data);
-
 		// find ship in shipyard OR on board
 		const { ship, location, shipyardIndex } = getShipFromDisplayId(
 			data.shipId,
@@ -81,13 +79,14 @@ const gameController = (() => {
 		);
 
 		// Place ship on board
-		console.log('current ship: ' + ship.getId());
 		currentPlayer.board.placeShip({
 			ship: ship,
 			coordinates: data.coordinates,
 			verticalAlignment: data.verticalAlignment,
+			location: location,
 		});
-		// Remove ship from player shipyard
+		// Remove ship from player shipyard and set alignement
+		ship.verticalAlignment = data.verticalAlignment;
 		currentPlayer.shipyard[shipyardIndex] = null;
 
 		PubSub.publish('GAME STATE CHANGED', getGameState());

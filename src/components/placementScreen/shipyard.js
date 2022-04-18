@@ -19,6 +19,8 @@ function shipyard(ships) {
 				shipSection.classList.add('ship-section');
 				shipSection.dataset.section = i;
 				shipSection.dataset.shipid = ships[ship].getId();
+				shipSection.dataset.verticalAlignment =
+					ships[ship].verticalAlignment;
 				shipDiv.appendChild(shipSection);
 			}
 		}

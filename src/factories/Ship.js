@@ -1,5 +1,6 @@
 function Ship(id, length) {
 	let hits = initHits();
+	let verticalAlignment = false;
 	const getId = () => id;
 	const getLength = () => length;
 	const getHits = () => hits;
@@ -38,6 +39,7 @@ function Ship(id, length) {
 		getHits,
 		hit,
 		isSunk,
+		verticalAlignment,
 	};
 }
 

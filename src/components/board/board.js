@@ -10,6 +10,8 @@ function board(boardState) {
 
 			if (boardState[i][j].ship) {
 				cell.dataset.shipid = boardState[i][j].ship.getId();
+				cell.dataset.verticalAlignment =
+					boardState[i][j].ship.verticalAlignment;
 				cell.classList.add('ship-section');
 				if (boardState[i][j].shipSection == 0) {
 					cell.classList.add('ship-forward');

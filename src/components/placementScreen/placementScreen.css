@@ -30,3 +30,7 @@
 .ship-selected {
 	border: 2px dashed greenyellow;
 }
+
+.ship-vertical {
+	flex-direction: column !important;
+}

@@ -2,9 +2,10 @@ import board from '../board/board';
 import shipyard from './shipyard';
 import './placementScreen.css';
 
-let selectedShip = null;
+let selectedShip = { shipId: null, verticalAlignment: false, onBoard: false };
 
 function placementScreen(player) {
+	selectedShip = resetSelectedShip();
 	const playerName = player.getName();
 	const playerBoardState = player.board.getBoard();
 	const playerShipyard = player.shipyard;
@@ -33,8 +34,13 @@ function placementScreen(player) {
 
 	placementScreen.appendChild(startButton);
 
+	document.removeEventListener('keyup', switchAlignment);
+	document.addEventListener('keyup', switchAlignment);
+
 	return placementScreen;
 }
+
+// PubSub
 
 PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
 	addCellListeners();
@@ -47,20 +53,24 @@ PubSub.subscribe('INVALID SHIP PLACEMENT', (msg, data) => {
 	msgBox.classList.add('warning-message');
 });
 
+function resetSelectedShip() {
+	return { shipId: null, verticalAlignment: false, onBoard: false };
+}
+
 function addCellListeners() {
 	const cells = document.querySelectorAll('.cell');
 	cells.forEach((cell) => {
 		cell.addEventListener('click', (e) => {
 			if (cell.classList.contains('ship-section')) {
 				return;
-			} else if (selectedShip) {
+			} else if (selectedShip.shipId) {
 				const placement = {
-					shipId: parseInt(selectedShip),
+					shipId: parseInt(selectedShip.shipId),
 					coordinates: {
 						x: parseInt(cell.dataset.x),
 						y: parseInt(cell.dataset.y),
 					},
-					verticalAlignment: false,
+					verticalAlignment: selectedShip.verticalAlignment,
 				};
 				placeShip(placement);
 			}
@@ -82,17 +92,82 @@ function selectShip(e) {
 			section.classList.remove('ship-selected');
 		});
 	}
-	selectedShip = e.target.dataset.shipid;
-	console.log('selected ship:' + selectedShip);
+	selectedShip.shipId = e.target.dataset.shipid;
 	document
-		.querySelectorAll(`.ship-section[data-shipid='${selectedShip}']`)
+		.querySelectorAll(`.ship-section[data-shipid='${selectedShip.shipId}']`)
 		.forEach((section) => {
 			section.classList.add('ship-selected');
 		});
+	if (e.target.parentNode.classList.contains('board')) {
+		selectedShip.onBoard = true;
+	} else {
+		selectedShip.onBoard = false;
+	}
+	console.log(
+		'SELECTED vertical align: ' + e.target.dataset.verticalAlignment
+	);
+
+	// Convert to boolean
+	if (e.target.dataset.verticalAlignment == 'true') {
+		selectedShip.verticalAlignment = true;
+	} else {
+		selectedShip.verticalAlignment = false;
+	}
+}
+
+function switchAlignment(event) {
+	console.log(selectedShip);
+	let ship;
+	if (selectedShip.shipId != null && event.code == 'Space') {
+		if (selectedShip.onBoard) {
+			ship = document.querySelector(
+				`.ship-section[data-shipid='${selectedShip.shipId}']`
+			);
+			selectedShip.verticalAlignment = !selectedShip.verticalAlignment;
+
+			const placement = {
+				shipId: parseInt(selectedShip.shipId),
+				coordinates: {
+					x: parseInt(ship.dataset.x),
+					y: parseInt(ship.dataset.y),
+				},
+				verticalAlignment: selectedShip.verticalAlignment,
+			};
+			placeShip(placement);
+			selectedShip.ship = resetSelectedShip();
+		} else {
+			ship = document.querySelector(
+				`.ship-outline[data-shipid='${selectedShip.shipId}']`
+			);
+			let verticalAlignment = ship.dataset.verticalAlignment;
+			verticalAlignment = !verticalAlignment;
+			selectedShip.verticalAlignment = verticalAlignment;
+
+			const shipSections = document.querySelectorAll('.ship-selected');
+			shipSections.forEach((section) => {
+				if (selectedShip.verticalAlignment) {
+					section.classList.add('ship-vertical');
+					section.dataset.verticalAlignment = true;
+				} else {
+					section.classList.remove('ship-vertical');
+					section.dataset.verticalAlignment = false;
+				}
+			});
+
+			if (selectedShip.verticalAlignment) {
+				ship.classList.add('ship-vertical');
+				ship.dataset.verticalAlignment = true;
+			} else {
+				ship.classList.remove('ship-vertical');
+				ship.dataset.verticalAlignment = false;
+			}
+		}
+	}
 }
 
 function placeShip(placement) {
 	PubSub.publish('PLACE SHIP', placement);
+	selectedShip.ship = resetSelectedShip();
 }
 
 function handleStartBattleClick() {

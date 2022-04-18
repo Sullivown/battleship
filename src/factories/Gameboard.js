@@ -43,6 +43,14 @@ function Gameboard(boardSize) {
 			if (board[x][y] == undefined) {
 				return false;
 			}
+			if (placement.location == 'board' && i == 0) {
+				if (placement.verticalAlignment) {
+					x += 1;
+				} else {
+					y += 1;
+				}
+				continue;
+			}
 			if (board[x][y].ship) {
 				return false;
 			}
@@ -57,6 +65,7 @@ function Gameboard(boardSize) {
 	};
 
 	const placeShip = (placement) => {
+		console.log(placement.verticalAlignment);
 		let { x, y } = placement.coordinates;
 
 		if (!validatePlacement(placement)) {
@@ -65,6 +74,8 @@ function Gameboard(boardSize) {
 		}
 
 		removeShip(placement.ship);
+		placement.ship.verticalAlignment = placement.verticalAlignment;
+		console.log(placement.ship);
 
 		for (
 			let i = 0, shipLength = placement.ship.getLength();
@@ -81,15 +92,15 @@ function Gameboard(boardSize) {
 		}
 
 		totalShips += 1;
+
+		console.log(board);
 	};
 
 	const removeShip = (ship) => {
 		for (let i = 0, boardSize = board.length; i < boardSize; i++) {
 			for (let j = 0, boardSize = board.length; j < boardSize; j++) {
 				if (board[i][j].ship == ship) {
-					console.log('ship found');
 					board[i][j].ship = null;
-					console.log('ship removed, cell.ship: ' + board[i][j].ship);
 				}
 			}
 		}

@@ -33,10 +33,6 @@ function getShipFromDisplayId(shipId, board, shipyard) {
 		location = 'board';
 	}
 
-	console.log(
-		`ship: ${ship}, location: ${location}, index: ${shipyardIndex}`
-	);
-
 	return { ship, location, shipyardIndex };
 }
 
