@@ -65,7 +65,6 @@ function Gameboard(boardSize) {
 	};
 
 	const placeShip = (placement) => {
-		console.log(placement.verticalAlignment);
 		let { x, y } = placement.coordinates;
 
 		if (!validatePlacement(placement)) {
@@ -75,7 +74,6 @@ function Gameboard(boardSize) {
 
 		removeShip(placement.ship);
 		placement.ship.verticalAlignment = placement.verticalAlignment;
-		console.log(placement.ship);
 
 		for (
 			let i = 0, shipLength = placement.ship.getLength();
@@ -92,8 +90,6 @@ function Gameboard(boardSize) {
 		}
 
 		totalShips += 1;
-
-		console.log(board);
 	};
 
 	const removeShip = (ship) => {

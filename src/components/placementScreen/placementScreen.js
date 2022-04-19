@@ -103,9 +103,6 @@ function selectShip(e) {
 	} else {
 		selectedShip.onBoard = false;
 	}
-	console.log(
-		'SELECTED vertical align: ' + e.target.dataset.verticalAlignment
-	);
 
 	// Convert to boolean
 	if (e.target.dataset.verticalAlignment == 'true') {
@@ -116,7 +113,6 @@ function selectShip(e) {
 }
 
 function switchAlignment(event) {
-	console.log(selectedShip);
 	let ship;
 	if (selectedShip.shipId != null && event.code == 'Space') {
 		if (selectedShip.onBoard) {
