@@ -26,13 +26,13 @@ function placementScreen(player) {
 
 	boardsDiv.appendChild(shipyard(playerShipyard));
 
-	const startButton = document.createElement('button');
-	startButton.type = 'button';
-	startButton.textContent = 'To Battle!';
-
-	startButton.addEventListener('click', (e) => {});
-
-	placementScreen.appendChild(startButton);
+	if (emptyShipyardCheck(playerShipyard)) {
+		const startButton = document.createElement('button');
+		startButton.type = 'button';
+		startButton.textContent = 'To Battle!';
+		startButton.addEventListener('click', startBattleClicked);
+		placementScreen.appendChild(startButton);
+	}
 
 	document.removeEventListener('keyup', switchAlignment);
 	document.addEventListener('keyup', switchAlignment);
@@ -42,7 +42,7 @@ function placementScreen(player) {
 
 // PubSub
 
-PubSub.subscribe('PLACEMENT BOARD RENDERED', () => {
+PubSub.subscribe('PLACEMENT SCREEN RENDERED', () => {
 	addCellListeners();
 	addShipListeners();
 });
@@ -114,6 +114,7 @@ function selectShip(e) {
 
 function switchAlignment(event) {
 	let ship;
+	// Determine if ship is on the board or in shipyard
 	if (selectedShip.shipId != null && event.code == 'Space') {
 		if (selectedShip.onBoard) {
 			ship = document.querySelector(
@@ -135,9 +136,11 @@ function switchAlignment(event) {
 			ship = document.querySelector(
 				`.ship-outline[data-shipid='${selectedShip.shipId}']`
 			);
-			let verticalAlignment = ship.dataset.verticalAlignment;
-			verticalAlignment = !verticalAlignment;
-			selectedShip.verticalAlignment = verticalAlignment;
+			if (ship.dataset.verticalAlignment == 'true') {
+				selectedShip.verticalAlignment = false;
+			} else {
+				selectedShip.verticalAlignment = true;
+			}
 
 			const shipSections = document.querySelectorAll('.ship-selected');
 			shipSections.forEach((section) => {
@@ -161,13 +164,23 @@ function switchAlignment(event) {
 	}
 }
 
+function emptyShipyardCheck(shipyard) {
+	for (let i = 0, length = shipyard.length; i < length; i++) {
+		if (shipyard[i] != null) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
 function placeShip(placement) {
 	PubSub.publish('PLACE SHIP', placement);
 	selectedShip.ship = resetSelectedShip();
 }
 
-function handleStartBattleClick() {
-	PubSub.publish('BATTLE STARTED');
+function startBattleClicked() {
+	PubSub.publish('START BATTLE');
 }
 
 export default placementScreen;

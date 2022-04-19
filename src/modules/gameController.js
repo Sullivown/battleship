@@ -92,6 +92,15 @@ const gameController = (() => {
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 
+	PubSub.subscribe('START BATTLE', (msg, data) => {
+		if (currentPlayer == player1) {
+			currentPlayer = player2;
+		} else if (currentPlayer == player2) {
+			gameStage = 'battle';
+		}
+		PubSub.publish('GAME STATE CHANGED', getGameState());
+	});
+
 	return { createShipyard, createNewGame, getGameState, gameOverCheck };
 })();
 

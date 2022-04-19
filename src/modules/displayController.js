@@ -49,10 +49,13 @@ const displayController = (() => {
 
 	const renderPlacement = (player) => {
 		gameArea.innerHTML = '';
+		console.log(player.getName());
 		gameArea.appendChild(placementScreen(player));
 	};
 
-	const renderBattle = () => {};
+	const renderBattle = () => {
+		console.log('battle!');
+	};
 
 	const renderGameOver = () => {};
 
@@ -64,7 +67,11 @@ const displayController = (() => {
 		}
 		if (gameStage == 'placement') {
 			renderPlacement(currentPlayer);
-			PubSub.publish('PLACEMENT BOARD RENDERED');
+			PubSub.publish('PLACEMENT SCREEN RENDERED');
+		}
+		if (gameStage == 'battle') {
+			renderBattle();
+			PubSub.publish('BATTLE SCREEN RENDERED');
 		}
 	});
 	return {
