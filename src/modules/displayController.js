@@ -1,5 +1,6 @@
 import selectScreen from '../components/selectScreen/selectScreen';
-import placementScreen from '../components/placementScreen/placementScreen';
+import renderPlacementScreen from '../components/placementScreen/placementScreen';
+import renderBattleScreen from '../components/battleScreen/battleScreen';
 
 const displayController = (() => {
 	// DOM cache
@@ -49,12 +50,12 @@ const displayController = (() => {
 
 	const renderPlacement = (player) => {
 		gameArea.innerHTML = '';
-		console.log(player.getName());
-		gameArea.appendChild(placementScreen(player));
+		gameArea.appendChild(renderPlacementScreen(player));
 	};
 
-	const renderBattle = () => {
-		console.log('battle!');
+	const renderBattle = (data) => {
+		gameArea.innerHTML = '';
+		gameArea.appendChild(renderBattleScreen(data));
 	};
 
 	const renderGameOver = () => {};
@@ -70,7 +71,11 @@ const displayController = (() => {
 			PubSub.publish('PLACEMENT SCREEN RENDERED');
 		}
 		if (gameStage == 'battle') {
-			renderBattle();
+			const state = {
+				currentPlayer,
+				enemyPlayer: getEnemyPlayer(currentPlayer, player1, player2),
+			};
+			renderBattle(state);
 			PubSub.publish('BATTLE SCREEN RENDERED');
 		}
 	});
@@ -78,5 +83,13 @@ const displayController = (() => {
 		init,
 	};
 })();
+
+function getEnemyPlayer(currentPlayer, player1, player2) {
+	if (currentPlayer == player1) {
+		return player2;
+	} else {
+		return player1;
+	}
+}
 
 export default displayController;

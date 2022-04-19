@@ -1,3 +1,5 @@
+import validateShipPlacement from '../helpers/validateShipPlacement';
+
 function Gameboard(boardSize) {
 	let board = initBoard();
 	let totalShips = 0;
@@ -22,52 +24,10 @@ function Gameboard(boardSize) {
 
 	const getBoard = () => board;
 
-	const validatePlacement = (placement) => {
-		// Placement obj contains coordinates (x, y) obj, ship and vertical alignment
-		let { x, y } = placement.coordinates;
-		const shipLength = placement.ship.getLength();
-
-		// Check board positions are valid for ship size
-		if (placement.verticalAlignment) {
-			if (x + shipLength > boardSize) {
-				return false;
-			}
-		} else {
-			if (y + shipLength > boardSize) {
-				return false;
-			}
-		}
-
-		// Check all spaces are empty
-		for (let i = 0; i < shipLength; i++) {
-			if (board[x][y] == undefined) {
-				return false;
-			}
-			if (placement.location == 'board' && i == 0) {
-				if (placement.verticalAlignment) {
-					x += 1;
-				} else {
-					y += 1;
-				}
-				continue;
-			}
-			if (board[x][y].ship) {
-				return false;
-			}
-			if (placement.verticalAlignment) {
-				x += 1;
-			} else {
-				y += 1;
-			}
-		}
-
-		return true;
-	};
-
 	const placeShip = (placement) => {
 		let { x, y } = placement.coordinates;
 
-		if (!validatePlacement(placement)) {
+		if (!validateShipPlacement(placement, board)) {
 			PubSub.publish('INVALID SHIP PLACEMENT');
 			throw new Error('Ship placement invalid!');
 		}
@@ -124,7 +84,6 @@ function Gameboard(boardSize) {
 
 	return {
 		getBoard,
-		validatePlacement,
 		placeShip,
 		removeShip,
 		receiveAttack,

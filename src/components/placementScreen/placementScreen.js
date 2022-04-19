@@ -4,7 +4,7 @@ import './placementScreen.css';
 
 let selectedShip = { shipId: null, verticalAlignment: false, onBoard: false };
 
-function placementScreen(player) {
+function renderPlacementScreen(player) {
 	selectedShip = resetSelectedShip();
 	const playerName = player.getName();
 	const playerBoardState = player.board.getBoard();
@@ -183,4 +183,4 @@ function startBattleClicked() {
 	PubSub.publish('START BATTLE');
 }
 
-export default placementScreen;
+export default renderPlacementScreen;

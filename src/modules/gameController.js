@@ -67,6 +67,21 @@ const gameController = (() => {
 	PubSub.subscribe('CREATE NEW GAME', (msg, data) => {
 		createNewGame(data);
 		setGameStage('placement');
+		if (currentPlayer.getType() == 'ai') {
+			currentPlayer.placeAIShips(
+				currentPlayer.shipyard,
+				currentPlayer.board
+			);
+			switchPlayer();
+		}
+		if (currentPlayer.getType() == 'ai') {
+			currentPlayer.placeAIShips(
+				currentPlayer.shipyard,
+				currentPlayer.board
+			);
+			switchPlayer();
+			gameStage = 'battle';
+		}
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 
@@ -85,7 +100,7 @@ const gameController = (() => {
 			verticalAlignment: data.verticalAlignment,
 			location: location,
 		});
-		// Remove ship from player shipyard and set alignement
+		// Remove ship from player shipyard and set alignment
 		ship.verticalAlignment = data.verticalAlignment;
 		currentPlayer.shipyard[shipyardIndex] = null;
 
@@ -94,9 +109,18 @@ const gameController = (() => {
 
 	PubSub.subscribe('START BATTLE', (msg, data) => {
 		if (currentPlayer == player1) {
-			currentPlayer = player2;
+			switchPlayer();
+
+			// Check if player2 is AI (to skip placement)
+			if (player2.getType() == 'ai') {
+				// Make AI placements
+				player2.placeAIShips(player2.shipyard, player2.board);
+				gameStage = 'battle';
+				switchPlayer();
+			}
 		} else if (currentPlayer == player2) {
 			gameStage = 'battle';
+			switchPlayer();
 		}
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
