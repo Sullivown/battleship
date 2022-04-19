@@ -14,6 +14,7 @@ const gameController = (() => {
 	let currentPlayer;
 	let enemyPlayer;
 	let gameStage = 'select';
+	let winner;
 
 	const getGameState = () => {
 		return { player1, player2, currentPlayer, gameStage };
@@ -39,6 +40,7 @@ const gameController = (() => {
 		player2.shipyard = createShipyard(SHIPS);
 
 		currentPlayer = player1;
+		enemyPlayer = player2;
 	};
 
 	const gameOverCheck = () => {
@@ -78,6 +80,11 @@ const gameController = (() => {
 		}
 
 		// Battle
+		if (gameStage == 'rbattle') {
+			const coordinates = currentPlayer.getAIMove(BOARD_SIZE);
+			currentPlayer.attack(enemyPlayer, coordinates);
+			console.log('the AI attacked!');
+		}
 
 		// Game Over
 
@@ -147,8 +154,22 @@ const gameController = (() => {
 	});
 
 	PubSub.subscribe('SHOT FIRED', (msg, data) => {
+		const { x, y } = data.coordinates;
 		currentPlayer.attack(enemyPlayer, data.coordinates);
-		switchPlayer();
+
+		// Switch player if the attack misses
+		if (enemyPlayer.board.getBoard()[x][y].ship == null) {
+			switchPlayer();
+			handleAIPlayer();
+		}
+
+		// Check for game over
+		const winnerCheck = gameOverCheck();
+		if (winnerCheck) {
+			setGameStage('finished');
+			winner = winnerCheck;
+		}
+
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 

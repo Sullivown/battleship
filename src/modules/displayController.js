@@ -58,7 +58,10 @@ const displayController = (() => {
 		gameArea.appendChild(renderBattleScreen(data));
 	};
 
-	const renderGameOver = () => {};
+	const renderGameOver = (data) => {
+		gameArea.innerHTML = '';
+		gameArea.textContent = `The winner is ${data.winner.getName()}!`;
+	};
 
 	// PubSub
 	PubSub.subscribe('GAME STATE CHANGED', (msg, data) => {
@@ -77,6 +80,10 @@ const displayController = (() => {
 			};
 			renderBattle(state);
 			PubSub.publish('BATTLE SCREEN RENDERED');
+		}
+
+		if (gameStage == 'finshed') {
+			renderGameOver(data.winner);
 		}
 	});
 	return {

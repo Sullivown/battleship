@@ -45,12 +45,6 @@ function addEnemyCellListeners() {
 						y: parseInt(cell.dataset.y),
 					},
 				};
-				console.log(
-					'CELL LISTENER: ' +
-						shot.coordinates.x +
-						' ' +
-						shot.coordinates.y
-				);
 				PubSub.publish('SHOT FIRED', shot);
 			}
 		});

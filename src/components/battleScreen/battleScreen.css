@@ -5,3 +5,11 @@
 .hit {
 	color: red;
 }
+
+#enemy-board .cell {
+	cursor: crosshair;
+}
+
+#enemy-board .shot-fired {
+	cursor: not-allowed;
+}
