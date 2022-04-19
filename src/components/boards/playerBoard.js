@@ -1,6 +1,8 @@
-function board(boardState) {
+function playerBoard(boardState) {
 	const board = document.createElement('div');
+	board.setAttribute('id', 'player-board');
 	board.classList.add('board');
+
 	for (let i = 0; i < boardState.length; i++) {
 		for (let j = 0; j < boardState[i].length; j++) {
 			const cell = document.createElement('div');
@@ -27,6 +29,9 @@ function board(boardState) {
 			if (boardState[i][j].shotFired == true) {
 				cell.classList.add('shot-fired');
 				cell.textContent = 'X';
+				if (boardState[i][j].ship) {
+					cell.classList.add('hit');
+				}
 			}
 
 			board.appendChild(cell);
@@ -36,4 +41,4 @@ function board(boardState) {
 	return board;
 }
 
-export default board;
+export default playerBoard;

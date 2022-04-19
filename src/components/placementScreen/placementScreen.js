@@ -1,5 +1,6 @@
-import board from '../board/board';
+import playerBoard from '../boards/playerBoard';
 import shipyard from './shipyard';
+import emptyShipyardCheck from '../../helpers/emptyShipyardCheck';
 import './placementScreen.css';
 
 let selectedShip = { shipId: null, verticalAlignment: false, onBoard: false };
@@ -21,8 +22,8 @@ function renderPlacementScreen(player) {
 	boardsDiv.classList.add('flex-row', 'wrap', 'boards-div');
 	placementScreen.appendChild(boardsDiv);
 
-	const playerBoard = board(playerBoardState);
-	boardsDiv.appendChild(playerBoard);
+	const playerBoardDiv = playerBoard(playerBoardState);
+	boardsDiv.appendChild(playerBoardDiv);
 
 	boardsDiv.appendChild(shipyard(playerShipyard));
 
@@ -30,7 +31,7 @@ function renderPlacementScreen(player) {
 		const startButton = document.createElement('button');
 		startButton.type = 'button';
 		startButton.textContent = 'To Battle!';
-		startButton.addEventListener('click', startBattleClicked);
+		startButton.addEventListener('click', placementCompleteClicked);
 		placementScreen.appendChild(startButton);
 	}
 
@@ -164,23 +165,13 @@ function switchAlignment(event) {
 	}
 }
 
-function emptyShipyardCheck(shipyard) {
-	for (let i = 0, length = shipyard.length; i < length; i++) {
-		if (shipyard[i] != null) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
 function placeShip(placement) {
 	PubSub.publish('PLACE SHIP', placement);
 	selectedShip.ship = resetSelectedShip();
 }
 
-function startBattleClicked() {
-	PubSub.publish('START BATTLE');
+function placementCompleteClicked() {
+	PubSub.publish('PLACEMENT COMPLETE');
 }
 
 export default renderPlacementScreen;

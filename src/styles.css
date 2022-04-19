@@ -55,18 +55,16 @@ header {
 	flex-direction: row;
 }
 
+.cell {
+	display: flex;
+	font-size: 3rem;
+	justify-content: center;
+	align-items: center;
+}
 .ship-section {
-	display: inline-block;
 	background-color: grey;
 	width: 3rem;
 	height: 3rem;
-}
-
-.ship-forward {
-}
-
-.shotFired {
-	color: red;
 }
 
 #msgbox {

@@ -4,6 +4,7 @@ import Player from '../factories/Player';
 import Ship from '../factories/Ship';
 import shipIdGenerator from '../helpers/shipIdGenerator';
 import getShipFromDisplayId from '../helpers/getShipFromDisplayId';
+import emptyShipyardCheck from '../helpers/emptyShipyardCheck';
 
 const gameController = (() => {
 	const BOARD_SIZE = 10;
@@ -11,6 +12,7 @@ const gameController = (() => {
 	let player1;
 	let player2;
 	let currentPlayer;
+	let enemyPlayer;
 	let gameStage = 'select';
 
 	const getGameState = () => {
@@ -55,8 +57,31 @@ const gameController = (() => {
 
 	const switchPlayer = () => {
 		currentPlayer == player1
-			? (currentPlayer = player2)
-			: (currentPlayer = player1);
+			? ((currentPlayer = player2), (enemyPlayer = player1))
+			: ((currentPlayer = player1), (enemyPlayer = player2));
+	};
+
+	const handleAIPlayer = () => {
+		if (currentPlayer.getType() != 'ai') {
+			return;
+		}
+		// Placement
+		if (gameStage == 'placement') {
+			if (!emptyShipyardCheck(currentPlayer.shipyard)) {
+				// Make AI placements
+				currentPlayer.placeAIShips(
+					currentPlayer.shipyard,
+					currentPlayer.board
+				);
+				PubSub.publish('PLACEMENT COMPLETE');
+			}
+		}
+
+		// Battle
+
+		// Game Over
+
+		return;
 	};
 
 	const setGameStage = (stage) => {
@@ -80,7 +105,7 @@ const gameController = (() => {
 				currentPlayer.board
 			);
 			switchPlayer();
-			gameStage = 'battle';
+			setGameStage('battle');
 		}
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
@@ -107,21 +132,23 @@ const gameController = (() => {
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 
-	PubSub.subscribe('START BATTLE', (msg, data) => {
-		if (currentPlayer == player1) {
-			switchPlayer();
+	PubSub.subscribe('PLACEMENT COMPLETE', (msg, data) => {
+		switchPlayer();
+		handleAIPlayer();
 
-			// Check if player2 is AI (to skip placement)
-			if (player2.getType() == 'ai') {
-				// Make AI placements
-				player2.placeAIShips(player2.shipyard, player2.board);
-				gameStage = 'battle';
-				switchPlayer();
-			}
-		} else if (currentPlayer == player2) {
-			gameStage = 'battle';
-			switchPlayer();
+		if (
+			emptyShipyardCheck(player1.shipyard) &&
+			emptyShipyardCheck(player2.shipyard)
+		) {
+			setGameStage('battle');
 		}
+
+		PubSub.publish('GAME STATE CHANGED', getGameState());
+	});
+
+	PubSub.subscribe('SHOT FIRED', (msg, data) => {
+		currentPlayer.attack(enemyPlayer, data.coordinates);
+		switchPlayer();
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 

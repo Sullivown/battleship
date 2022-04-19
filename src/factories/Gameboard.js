@@ -66,11 +66,11 @@ function Gameboard(boardSize) {
 		const cell = board[coordinates.x][coordinates.y];
 		cell.shotFired = true;
 
-		const ship = cell.ship;
-		ship.hit(cell.shipSection);
-
-		if (ship.isSunk()) {
-			sunkShips += 1;
+		if (cell.ship) {
+			cell.ship.hit(cell.shipSection);
+			if (cell.ship.isSunk()) {
+				sunkShips += 1;
+			}
 		}
 	};
 

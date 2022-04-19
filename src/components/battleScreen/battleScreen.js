@@ -1,4 +1,5 @@
-import board from '../board/board';
+import playerBoard from '../boards/playerBoard';
+import enemyBoard from '../boards/enemyBoard';
 import './battleScreen.css';
 
 function renderBattleScreen(state) {
@@ -18,13 +19,42 @@ function renderBattleScreen(state) {
 	boardsDiv.classList.add('flex-row', 'wrap', 'boards-div');
 	battleScreen.appendChild(boardsDiv);
 
-	const playerBoard = board(playerBoardState);
-	boardsDiv.appendChild(playerBoard);
+	const playerBoardDiv = playerBoard(playerBoardState);
+	boardsDiv.appendChild(playerBoardDiv);
 
-	const enemyBoard = board(enemyBoardState);
-	boardsDiv.appendChild(enemyBoard);
+	const enemyBoardDiv = enemyBoard(enemyBoardState);
+	boardsDiv.appendChild(enemyBoardDiv);
 
 	return battleScreen;
+}
+
+PubSub.subscribe('BATTLE SCREEN RENDERED', () => {
+	addEnemyCellListeners();
+});
+
+function addEnemyCellListeners() {
+	const enemyCells = document.querySelectorAll('#enemy-board .cell');
+	enemyCells.forEach((cell) => {
+		cell.addEventListener('click', (e) => {
+			if (cell.classList.contains('shot-fired')) {
+				return;
+			} else {
+				const shot = {
+					coordinates: {
+						x: parseInt(cell.dataset.x),
+						y: parseInt(cell.dataset.y),
+					},
+				};
+				console.log(
+					'CELL LISTENER: ' +
+						shot.coordinates.x +
+						' ' +
+						shot.coordinates.y
+				);
+				PubSub.publish('SHOT FIRED', shot);
+			}
+		});
+	});
 }
 
 export default renderBattleScreen;

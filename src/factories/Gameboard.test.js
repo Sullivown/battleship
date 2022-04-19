@@ -115,6 +115,11 @@ describe('Gameboard initializer', () => {
 		expect(board.getBoard()[x][y].ship.getHits()[1]).toBe(true);
 	});
 
+	test('Missed hit', () => {
+		board.receiveAttack({ x: 0, y: 0 });
+		expect(board.getBoard()[0][0].shotFired).toBe(true);
+	});
+
 	test('All ships sunk reported', () => {
 		const testShip = Ship(0, 5);
 		const x = 0;
