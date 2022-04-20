@@ -49,9 +49,11 @@ const gameController = (() => {
 		const p2Sunk = player2.board.allSunk();
 
 		if (p1Sunk) {
-			return player2;
+			winner = player2;
+			return true;
 		} else if (p2Sunk) {
-			return player1;
+			winner = player1;
+			return true;
 		} else {
 			return false;
 		}
@@ -72,6 +74,7 @@ const gameController = (() => {
 	const makeAIAttack = () => {
 		const attackCoordinates = currentPlayer.getAIMove(BOARD_SIZE);
 		const { x, y } = attackCoordinates;
+		console.log(attackCoordinates);
 		currentPlayer.attack(enemyPlayer, attackCoordinates);
 
 		if (enemyPlayer.board.getBoard()[x][y].ship != null) {
@@ -156,13 +159,14 @@ const gameController = (() => {
 		if (enemyPlayer.board.getBoard()[x][y].ship == null) {
 			switchPlayer();
 		}
+		if (currentPlayer.getType() == 'ai') {
+			handleAIAttack();
+		}
 
 		// Check for game over
-		const winnerCheck = gameOverCheck();
-		if (winnerCheck) {
+		if (gameOverCheck()) {
 			setGameStage('finished');
 
-			winner = winnerCheck;
 			console.log('Game Over! ' + winner.getName() + ' wins!');
 		}
 

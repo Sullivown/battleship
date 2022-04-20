@@ -59,8 +59,9 @@ const displayController = (() => {
 	};
 
 	const renderGameOver = (data) => {
-		gameArea.innerHTML = '';
-		gameArea.textContent = `The winner is ${data.winner.getName()}!`;
+		msgBox.textContent = `The winner is ${data.winner.getName()}!`;
+		// Remove board event listeners
+		const enemyCells = document.querySelectorAll('#enemy-board .cell');
 	};
 
 	// PubSub
@@ -83,7 +84,12 @@ const displayController = (() => {
 		}
 
 		if (gameStage == 'finished') {
-			renderGameOver(data.winner);
+			const state = {
+				currentPlayer,
+				enemyPlayer: getEnemyPlayer(currentPlayer, player1, player2),
+			};
+			renderBattle(state);
+			renderGameOver(data);
 		}
 	});
 	return {
