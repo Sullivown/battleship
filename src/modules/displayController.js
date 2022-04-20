@@ -85,8 +85,8 @@ const displayController = (() => {
 
 		if (gameStage == 'finished') {
 			const state = {
-				currentPlayer,
-				enemyPlayer: getEnemyPlayer(currentPlayer, player1, player2),
+				currentPlayer: winner,
+				enemyPlayer: getEnemyPlayer(winner, player1, player2),
 				winner,
 			};
 			renderGameOver(state);

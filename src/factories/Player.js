@@ -1,5 +1,4 @@
 import validateShipPlacement from '../helpers/validateShipPlacement';
-import PubSub from 'pubsub-js';
 
 function Player(name, type) {
 	const getName = () => name;
@@ -9,7 +8,11 @@ function Player(name, type) {
 	let shipyard;
 
 	const validAttack = (coordinates) => {
-		const found = movesMade.find((element) => element == coordinates);
+		const found = movesMade.find(
+			(element) =>
+				element.x == coordinates.x && element.y == coordinates.y
+		);
+		console.log(found);
 		if (found) {
 			return false;
 		} else {

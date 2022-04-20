@@ -68,13 +68,11 @@ const gameController = (() => {
 	const handleAIAttack = () => {
 		makeAIAttack();
 		switchPlayer();
-		PubSub.publish('GAME STATE CHANGED', getGameState());
 	};
 
 	const makeAIAttack = () => {
 		const attackCoordinates = currentPlayer.getAIMove(BOARD_SIZE);
 		const { x, y } = attackCoordinates;
-		console.log(attackCoordinates);
 		currentPlayer.attack(enemyPlayer, attackCoordinates);
 
 		if (enemyPlayer.board.getBoard()[x][y].ship != null) {
@@ -99,8 +97,15 @@ const gameController = (() => {
 			currentPlayer = player1;
 		}
 
+		// If both players are AI, play game
 		if (player1.getType() == 'ai' && player2.getType() == 'ai') {
-			PubSub.publish('PLACEMENT COMPLETE');
+			do {
+				handleAIAttack();
+			} while (!gameOverCheck());
+
+			setGameStage('finished');
+
+			console.log('Game Over! ' + winner.getName() + ' wins!');
 		}
 
 		PubSub.publish('GAME STATE CHANGED', getGameState());
@@ -142,23 +147,6 @@ const gameController = (() => {
 		) {
 			setGameStage('battle');
 			currentPlayer = player1;
-
-			// If both players are AI, play game
-			if (player1.getType() == 'ai' && player2.getType() == 'ai') {
-				do {
-					console.log(
-						`Before Attack: curr player = ${currentPlayer.getName()}`
-					);
-					handleAIAttack();
-					console.log(
-						`After Attack + Switch: curr player = ${currentPlayer.getName()}`
-					);
-				} while (!gameOverCheck());
-
-				setGameStage('finished');
-
-				console.log('Game Over! ' + winner.getName() + ' wins!');
-			}
 
 			// If AI, make first move
 			if (currentPlayer.getType() == 'ai') {
