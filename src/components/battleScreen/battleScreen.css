@@ -6,6 +6,12 @@
 	color: red;
 }
 
+.sunk {
+	background-color: red !important;
+	border: 1px solid red;
+	color: white;
+}
+
 #enemy-board .cell {
 	cursor: crosshair;
 }

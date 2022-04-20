@@ -32,22 +32,33 @@ PubSub.subscribe('BATTLE SCREEN RENDERED', () => {
 	addEnemyCellListeners();
 });
 
+function makeAttack(e) {
+	const cell = e.target;
+	if (cell.classList.contains('shot-fired')) {
+		return;
+	} else {
+		const shot = {
+			coordinates: {
+				x: parseInt(cell.dataset.x),
+				y: parseInt(cell.dataset.y),
+			},
+		};
+		removeEnemyCellListeners();
+		PubSub.publish('SHOT FIRED', shot);
+	}
+}
+
 function addEnemyCellListeners() {
 	const enemyCells = document.querySelectorAll('#enemy-board .cell');
 	enemyCells.forEach((cell) => {
-		cell.addEventListener('click', (e) => {
-			if (cell.classList.contains('shot-fired')) {
-				return;
-			} else {
-				const shot = {
-					coordinates: {
-						x: parseInt(cell.dataset.x),
-						y: parseInt(cell.dataset.y),
-					},
-				};
-				PubSub.publish('SHOT FIRED', shot);
-			}
-		});
+		cell.addEventListener('click', makeAttack);
+	});
+}
+
+function removeEnemyCellListeners() {
+	const enemyCells = document.querySelectorAll('#enemy-board .cell');
+	enemyCells.forEach((cell) => {
+		cell.removeEventListener('click', makeAttack);
 	});
 }
 

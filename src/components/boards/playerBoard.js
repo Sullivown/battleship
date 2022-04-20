@@ -31,6 +31,9 @@ function playerBoard(boardState) {
 				cell.textContent = 'X';
 				if (boardState[i][j].ship) {
 					cell.classList.add('hit');
+					if (boardState[i][j].ship.isSunk()) {
+						cell.classList.add('sunk');
+					}
 				}
 			}
 

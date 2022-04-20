@@ -80,10 +80,11 @@ const gameController = (() => {
 		}
 
 		// Battle
-		if (gameStage == 'rbattle') {
-			const coordinates = currentPlayer.getAIMove(BOARD_SIZE);
-			currentPlayer.attack(enemyPlayer, coordinates);
+		if (gameStage == 'battle') {
+			const shot = {};
+			shot.coordinates = currentPlayer.getAIMove(BOARD_SIZE);
 			console.log('the AI attacked!');
+			PubSub.publish('SHOT FIRED', shot);
 		}
 
 		// Game Over
@@ -148,6 +149,10 @@ const gameController = (() => {
 			emptyShipyardCheck(player2.shipyard)
 		) {
 			setGameStage('battle');
+			// If AI, make first move
+			if (currentPlayer.getType() == 'ai') {
+				handleAIPlayer();
+			}
 		}
 
 		PubSub.publish('GAME STATE CHANGED', getGameState());
@@ -160,8 +165,10 @@ const gameController = (() => {
 		// Switch player if the attack misses
 		if (enemyPlayer.board.getBoard()[x][y].ship == null) {
 			switchPlayer();
-			handleAIPlayer();
+			console.log(currentPlayer.getName());
 		}
+
+		handleAIPlayer();
 
 		// Check for game over
 		const winnerCheck = gameOverCheck();

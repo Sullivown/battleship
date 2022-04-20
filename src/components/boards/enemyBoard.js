@@ -13,9 +13,14 @@ function enemyBoard(boardState) {
 			if (boardState[i][j].shotFired == true) {
 				cell.classList.add('shot-fired');
 				cell.textContent = 'X';
+
 				if (boardState[i][j].ship) {
 					cell.classList.add('ship-section');
 					cell.classList.add('hit');
+
+					if (boardState[i][j].ship.isSunk()) {
+						cell.classList.add('sunk');
+					}
 				}
 			} else {
 				cell.classList.add('fog-of-war');
