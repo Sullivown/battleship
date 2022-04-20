@@ -142,6 +142,18 @@ const gameController = (() => {
 		) {
 			setGameStage('battle');
 			currentPlayer = player1;
+			// If both players are AI, play game
+			if (player1.getType() == 'ai' && player2.getType() == 'ai') {
+				do {
+					handleAIAttack();
+					switchPlayer();
+				} while (!gameOverCheck());
+
+				setGameStage('finished');
+
+				console.log('Game Over! ' + winner.getName() + ' wins!');
+			}
+
 			// If AI, make first move
 			if (currentPlayer.getType() == 'ai') {
 				handleAIAttack();
