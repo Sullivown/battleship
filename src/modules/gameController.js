@@ -142,6 +142,7 @@ const gameController = (() => {
 		) {
 			setGameStage('battle');
 			currentPlayer = player1;
+
 			// If both players are AI, play game
 			if (player1.getType() == 'ai' && player2.getType() == 'ai') {
 				do {

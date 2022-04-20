@@ -1,6 +1,7 @@
 import selectScreen from '../components/selectScreen/selectScreen';
 import renderPlacementScreen from '../components/placementScreen/placementScreen';
 import renderBattleScreen from '../components/battleScreen/battleScreen';
+import renderGameOverScreen from '../components/gameOverScreen/gameOverScreen';
 
 const displayController = (() => {
 	// DOM cache
@@ -53,20 +54,19 @@ const displayController = (() => {
 		gameArea.appendChild(renderPlacementScreen(player));
 	};
 
-	const renderBattle = (data) => {
+	const renderBattle = (state) => {
 		gameArea.innerHTML = '';
-		gameArea.appendChild(renderBattleScreen(data));
+		gameArea.appendChild(renderBattleScreen(state));
 	};
 
-	const renderGameOver = (data) => {
-		msgBox.textContent = `The winner is ${data.winner.getName()}!`;
-		// Remove board event listeners
-		const enemyCells = document.querySelectorAll('#enemy-board .cell');
+	const renderGameOver = (state) => {
+		gameArea.innerHTML = '';
+		gameArea.appendChild(renderGameOverScreen(state));
 	};
 
 	// PubSub
 	PubSub.subscribe('GAME STATE CHANGED', (msg, data) => {
-		const { currentPlayer, player1, player2, gameStage } = data;
+		const { currentPlayer, player1, player2, gameStage, winner } = data;
 		if (gameStage == 'select') {
 			renderSelectScreen();
 		}
@@ -87,9 +87,10 @@ const displayController = (() => {
 			const state = {
 				currentPlayer,
 				enemyPlayer: getEnemyPlayer(currentPlayer, player1, player2),
+				winner,
 			};
-			renderBattle(state);
-			renderGameOver(data);
+			renderGameOver(state);
+			PubSub.publish('GAME OVER SCREEN RENDERED');
 		}
 	});
 	return {

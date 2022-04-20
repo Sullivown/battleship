@@ -44,6 +44,7 @@ function renderPlacementScreen(player) {
 // PubSub
 
 PubSub.subscribe('PLACEMENT SCREEN RENDERED', () => {
+	removeEventListeners();
 	addCellListeners();
 	addShipListeners();
 });
@@ -61,22 +62,25 @@ function resetSelectedShip() {
 function addCellListeners() {
 	const cells = document.querySelectorAll('.cell');
 	cells.forEach((cell) => {
-		cell.addEventListener('click', (e) => {
-			if (cell.classList.contains('ship-section')) {
-				return;
-			} else if (selectedShip.shipId) {
-				const placement = {
-					shipId: parseInt(selectedShip.shipId),
-					coordinates: {
-						x: parseInt(cell.dataset.x),
-						y: parseInt(cell.dataset.y),
-					},
-					verticalAlignment: selectedShip.verticalAlignment,
-				};
-				placeShip(placement);
-			}
-		});
+		cell.addEventListener('click', handlePlaceShip);
 	});
+}
+
+function handlePlaceShip(event) {
+	const cell = event.target;
+	if (cell.classList.contains('ship-section')) {
+		return;
+	} else if (selectedShip.shipId) {
+		const placement = {
+			shipId: parseInt(selectedShip.shipId),
+			coordinates: {
+				x: parseInt(cell.dataset.x),
+				y: parseInt(cell.dataset.y),
+			},
+			verticalAlignment: selectedShip.verticalAlignment,
+		};
+		placeShip(placement);
+	}
 }
 
 function addShipListeners() {
@@ -163,6 +167,18 @@ function switchAlignment(event) {
 			}
 		}
 	}
+}
+
+function removeEventListeners() {
+	const cells = document.querySelectorAll('.cell');
+	cells.forEach((cell) => {
+		cell.removeEventListener('click', handlePlaceShip);
+	});
+
+	const ships = document.querySelectorAll('.ship-section');
+	ships.forEach((ship) => {
+		ship.removeEventListener('click', selectShip);
+	});
 }
 
 function placeShip(placement) {
