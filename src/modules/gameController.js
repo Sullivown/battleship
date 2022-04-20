@@ -17,7 +17,7 @@ const gameController = (() => {
 	let winner;
 
 	const getGameState = () => {
-		return { player1, player2, currentPlayer, gameStage };
+		return { player1, player2, currentPlayer, gameStage, winner };
 	};
 
 	const createShipyard = (ships) => {
@@ -63,33 +63,20 @@ const gameController = (() => {
 			: ((currentPlayer = player1), (enemyPlayer = player2));
 	};
 
-	const handleAIPlayer = () => {
-		if (currentPlayer.getType() != 'ai') {
-			return;
-		}
-		// Placement
-		if (gameStage == 'placement') {
-			if (!emptyShipyardCheck(currentPlayer.shipyard)) {
-				// Make AI placements
-				currentPlayer.placeAIShips(
-					currentPlayer.shipyard,
-					currentPlayer.board
-				);
-				PubSub.publish('PLACEMENT COMPLETE');
-			}
-		}
+	const handleAIAttack = () => {
+		makeAIAttack();
+		switchPlayer();
+		PubSub.publish('GAME STATE CHANGED', getGameState());
+	};
 
-		// Battle
-		if (gameStage == 'battle') {
-			const shot = {};
-			shot.coordinates = currentPlayer.getAIMove(BOARD_SIZE);
-			console.log('the AI attacked!');
-			PubSub.publish('SHOT FIRED', shot);
+	const makeAIAttack = () => {
+		const attackCoordinates = currentPlayer.getAIMove(BOARD_SIZE);
+		const { x, y } = attackCoordinates;
+		currentPlayer.attack(enemyPlayer, attackCoordinates);
+
+		if (enemyPlayer.board.getBoard()[x][y].ship != null) {
+			makeAIAttack();
 		}
-
-		// Game Over
-
-		return;
 	};
 
 	const setGameStage = (stage) => {
@@ -100,21 +87,19 @@ const gameController = (() => {
 	PubSub.subscribe('CREATE NEW GAME', (msg, data) => {
 		createNewGame(data);
 		setGameStage('placement');
-		if (currentPlayer.getType() == 'ai') {
-			currentPlayer.placeAIShips(
-				currentPlayer.shipyard,
-				currentPlayer.board
-			);
-			switchPlayer();
+		if (player1.getType() == 'ai') {
+			player1.placeAIShips(player1.shipyard, player1.board);
+			currentPlayer = player2;
 		}
-		if (currentPlayer.getType() == 'ai') {
-			currentPlayer.placeAIShips(
-				currentPlayer.shipyard,
-				currentPlayer.board
-			);
-			switchPlayer();
-			setGameStage('battle');
+		if (player2.getType() == 'ai') {
+			player2.placeAIShips(player2.shipyard, player2.board);
+			currentPlayer = player1;
 		}
+
+		if (player1.getType() == 'ai' && player2.getType() == 'ai') {
+			PubSub.publish('PLACEMENT COMPLETE');
+		}
+
 		PubSub.publish('GAME STATE CHANGED', getGameState());
 	});
 
@@ -141,17 +126,22 @@ const gameController = (() => {
 	});
 
 	PubSub.subscribe('PLACEMENT COMPLETE', (msg, data) => {
-		switchPlayer();
-		handleAIPlayer();
+		if (emptyShipyardCheck(player1.shipyard)) {
+			currentPlayer = player2;
+		}
+		if (emptyShipyardCheck(player2.shipyard)) {
+			currentPlayer = player1;
+		}
 
 		if (
 			emptyShipyardCheck(player1.shipyard) &&
 			emptyShipyardCheck(player2.shipyard)
 		) {
 			setGameStage('battle');
+			currentPlayer = player1;
 			// If AI, make first move
 			if (currentPlayer.getType() == 'ai') {
-				handleAIPlayer();
+				handleAIAttack();
 			}
 		}
 
@@ -165,16 +155,15 @@ const gameController = (() => {
 		// Switch player if the attack misses
 		if (enemyPlayer.board.getBoard()[x][y].ship == null) {
 			switchPlayer();
-			console.log(currentPlayer.getName());
 		}
-
-		handleAIPlayer();
 
 		// Check for game over
 		const winnerCheck = gameOverCheck();
 		if (winnerCheck) {
 			setGameStage('finished');
+
 			winner = winnerCheck;
+			console.log('Game Over! ' + winner.getName() + ' wins!');
 		}
 
 		PubSub.publish('GAME STATE CHANGED', getGameState());

@@ -82,7 +82,7 @@ const displayController = (() => {
 			PubSub.publish('BATTLE SCREEN RENDERED');
 		}
 
-		if (gameStage == 'finshed') {
+		if (gameStage == 'finished') {
 			renderGameOver(data.winner);
 		}
 	});
