@@ -1,7 +1,15 @@
-let selectedShip = null;
-
 function shipyard(ships) {
 	const shipyardDiv = document.createElement('div');
+	shipyardDiv.classList.add('flex-column', 'wrap');
+
+	const heading = document.createElement('h2');
+	heading.textContent = 'Shipyard';
+	shipyardDiv.appendChild(heading);
+
+	const p = document.createElement('p');
+	p.textContent =
+		'Click to select a ship, then click on a valid square on the board to place the ship. Use SPACEBAR to change alignment.';
+	shipyardDiv.appendChild(p);
 
 	const shipyard = document.createElement('div');
 	shipyardDiv.appendChild(shipyard);

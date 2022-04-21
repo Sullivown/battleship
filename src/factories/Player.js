@@ -12,7 +12,6 @@ function Player(name, type) {
 			(element) =>
 				element.x == coordinates.x && element.y == coordinates.y
 		);
-		console.log(found);
 		if (found) {
 			return false;
 		} else {

@@ -88,6 +88,8 @@ const displayController = (() => {
 				currentPlayer: winner,
 				enemyPlayer: getEnemyPlayer(winner, player1, player2),
 				winner,
+				player1,
+				player2,
 			};
 			renderGameOver(state);
 			PubSub.publish('GAME OVER SCREEN RENDERED');

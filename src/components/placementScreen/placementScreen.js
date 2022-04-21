@@ -19,7 +19,7 @@ function renderPlacementScreen(player) {
 	placementScreen.classList.add('flex-column');
 
 	const boardsDiv = document.createElement('div');
-	boardsDiv.classList.add('flex-row', 'wrap', 'boards-div');
+	boardsDiv.classList.add('flex-row', 'flex-wrap', 'boards-div');
 	placementScreen.appendChild(boardsDiv);
 
 	const playerBoardDiv = playerBoard(playerBoardState);

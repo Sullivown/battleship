@@ -3,22 +3,28 @@
 }
 
 .board {
+	align-self: flex-start;
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	grid-template-rows: repeat(10, 1fr);
 }
 
-.cell {
-	height: 3rem;
-	width: 3rem;
-	border: 0.5px solid black;
-	background-color: aqua;
+h2 {
+	margin-block: 0px;
+}
+
+.flex-column p {
+	max-width: 50ch;
+	text-align: center;
+	margin-block: 0px;
+	line-height: 1.5rem;
 }
 
 .shipyard {
 	display: flex;
-	min-height: 20rem;
-	min-width: 20rem;
+	flex: 1;
+	min-height: 10 0%;
+	min-width: 100%;
 	gap: 1rem;
 	flex-direction: column;
 	align-items: center;
@@ -27,8 +33,15 @@
 	padding: 1rem;
 }
 
+.ship-outline {
+	border: 0.5px solid black;
+}
+.ship-outline .ship-section {
+	border: 0.5px solid black;
+}
+
 .ship-selected {
-	border: 2px dashed greenyellow;
+	border: 2px dashed greenyellow !important;
 }
 
 .ship-vertical {
