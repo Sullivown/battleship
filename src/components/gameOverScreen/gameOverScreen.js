@@ -1,15 +1,14 @@
 import playerBoard from '../boards/playerBoard';
-import enemyBoard from '../boards/enemyBoard';
 import '../battleScreen/battleScreen.css';
 
 let stateData;
 
 function renderGameOverScreen(state) {
 	stateData = state;
-	const currentPlayerName = state.currentPlayer.getName();
-	const playerBoardState = state.currentPlayer.board.getBoard();
-	const enemyPlayerName = state.enemyPlayer.getName();
-	const enemyBoardState = state.enemyPlayer.board.getBoard();
+	const player1Name = state.player1.getName();
+	const player1BoardState = state.player1.board.getBoard();
+	const player2Name = state.player2.getName();
+	const player2BoardState = state.player2.board.getBoard();
 
 	const msgBox = document.querySelector('#msgbox');
 	msgBox.classList.remove('warning-message');
@@ -22,16 +21,37 @@ function renderGameOverScreen(state) {
 	boardsDiv.classList.add('flex-row', 'flex-wrap', 'boards-div');
 	battleScreen.appendChild(boardsDiv);
 
-	const playerBoardDiv = playerBoard(playerBoardState);
-	boardsDiv.appendChild(playerBoardDiv);
+	const boardSection1 = document.createElement('div');
+	boardSection1.classList.add('flex-column');
+	boardsDiv.appendChild(boardSection1);
 
-	const enemyBoardDiv = playerBoard(enemyBoardState);
-	boardsDiv.appendChild(enemyBoardDiv);
+	const player1NameTitle = document.createElement('h2');
+	player1NameTitle.textContent = player1Name;
+	boardSection1.appendChild(player1NameTitle);
+
+	const player1BoardDiv = playerBoard(player1BoardState);
+	boardSection1.appendChild(player1BoardDiv);
+
+	const boardSection2 = document.createElement('div');
+	boardSection2.classList.add('flex-column');
+	boardsDiv.appendChild(boardSection2);
+
+	const player2NameTitle = document.createElement('h2');
+	player2NameTitle.textContent = player2Name;
+	boardSection2.appendChild(player2NameTitle);
+
+	const player2BoardDiv = playerBoard(player2BoardState);
+	boardSection2.appendChild(player2BoardDiv);
 
 	const playAgainButton = document.createElement('button');
 	playAgainButton.textContent = 'Play again?';
 	playAgainButton.addEventListener('click', playAgain);
 	battleScreen.appendChild(playAgainButton);
+
+	const menuReturnButton = document.createElement('button');
+	menuReturnButton.textContent = 'Return to Menu';
+	menuReturnButton.addEventListener('click', returnToMenu);
+	battleScreen.appendChild(menuReturnButton);
 
 	return battleScreen;
 }
@@ -58,6 +78,10 @@ function playAgain(e) {
 		},
 	};
 	PubSub.publish('CREATE NEW GAME', data);
+}
+
+function returnToMenu() {
+	PubSub.publish('RESET');
 }
 
 export default renderGameOverScreen;

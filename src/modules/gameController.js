@@ -85,6 +85,11 @@ const gameController = (() => {
 	};
 
 	// PubSub
+	PubSub.subscribe('RESET', (msg, data) => {
+		setGameStage('select');
+		PubSub.publish('GAME STATE CHANGED', getGameState());
+	});
+
 	PubSub.subscribe('CREATE NEW GAME', (msg, data) => {
 		createNewGame(data);
 		setGameStage('placement');

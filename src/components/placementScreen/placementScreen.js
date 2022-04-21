@@ -13,7 +13,9 @@ function renderPlacementScreen(player) {
 
 	const msgBox = document.querySelector('#msgbox');
 	msgBox.classList.remove('warning-message');
-	msgBox.textContent = `${playerName}, place your fleet!`;
+	msgBox.innerHTML = `${String(
+		playerName
+	)}, place your fleet!<br>Click to select a ship, then click on a valid square on the board to place the ship<br>Use SPACEBAR or click the button to switch alignment.`;
 
 	const placementScreen = document.createElement('div');
 	placementScreen.classList.add('flex-column');
@@ -47,6 +49,7 @@ PubSub.subscribe('PLACEMENT SCREEN RENDERED', () => {
 	removeEventListeners();
 	addCellListeners();
 	addShipListeners();
+	addAlignmentListener();
 });
 
 PubSub.subscribe('INVALID SHIP PLACEMENT', (msg, data) => {
@@ -90,6 +93,12 @@ function addShipListeners() {
 	});
 }
 
+function addAlignmentListener() {
+	const btn = document.querySelector('#alignment');
+	btn.removeEventListener('click', switchAlignment);
+	btn.addEventListener('click', switchAlignment);
+}
+
 function selectShip(e) {
 	const currSelected = document.querySelectorAll('.ship-selected');
 	if (currSelected) {
@@ -120,7 +129,10 @@ function selectShip(e) {
 function switchAlignment(event) {
 	let ship;
 	// Determine if ship is on the board or in shipyard
-	if (selectedShip.shipId != null && event.code == 'Space') {
+	if (
+		selectedShip.shipId != null &&
+		(event.code == 'Space' || event.target.id == 'alignment')
+	) {
 		if (selectedShip.onBoard) {
 			ship = document.querySelector(
 				`.ship-section[data-shipid='${selectedShip.shipId}']`
