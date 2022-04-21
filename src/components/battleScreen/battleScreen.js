@@ -5,12 +5,11 @@ import './battleScreen.css';
 function renderBattleScreen(state) {
 	const currentPlayerName = state.currentPlayer.getName();
 	const playerBoardState = state.currentPlayer.board.getBoard();
-	const enemyPlayerName = state.enemyPlayer.getName();
 	const enemyBoardState = state.enemyPlayer.board.getBoard();
 
 	const msgBox = document.querySelector('#msgbox');
 	msgBox.classList.remove('warning-message');
-	msgBox.textContent = `${currentPlayerName}, choose coordinate to attack!`;
+	msgBox.textContent = `${currentPlayerName}, choose coordinates to attack!`;
 
 	const battleScreen = document.createElement('div');
 	battleScreen.classList.add('flex-column');

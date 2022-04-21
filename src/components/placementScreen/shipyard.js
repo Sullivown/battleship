@@ -3,14 +3,14 @@ function shipyard(ships) {
 	shipyardDiv.setAttribute('id', 'shipyard-container');
 	shipyardDiv.classList.add('flex-column', 'wrap');
 
-	const heading = document.createElement('h2');
-	heading.textContent = 'Shipyard';
-	shipyardDiv.appendChild(heading);
-
 	const alignmentButton = document.createElement('button');
 	alignmentButton.textContent = 'Switch Alignment';
 	alignmentButton.setAttribute('id', 'alignment');
 	shipyardDiv.appendChild(alignmentButton);
+
+	const heading = document.createElement('h2');
+	heading.textContent = 'Shipyard';
+	shipyardDiv.appendChild(heading);
 
 	const shipyard = document.createElement('div');
 	shipyardDiv.appendChild(shipyard);
