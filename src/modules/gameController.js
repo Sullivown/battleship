@@ -85,7 +85,10 @@ const gameController = (() => {
 	};
 
 	const makeAIAttack = () => {
-		const attackCoordinates = currentPlayer.getAIMove(BOARD_SIZE);
+		const attackCoordinates = currentPlayer.getAIMove(
+			BOARD_SIZE,
+			enemyPlayer.board.getBoard()
+		);
 		const { x, y } = attackCoordinates;
 		currentPlayer.attack(enemyPlayer, attackCoordinates);
 
