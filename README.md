@@ -2,6 +2,8 @@
 
 A recreation of the classic [Battleship game](<https://en.wikipedia.org/wiki/Battleship_(game)>) as part of [The Odin Project](https://www.theodinproject.com/lessons/node-path-javascript-battleship) course.
 
+[You can view it live here](https://sullivown.github.io/battleship/).
+
 ## How to Play
 
 Players can choose to play against the AI or another human player.
