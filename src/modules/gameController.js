@@ -15,9 +15,17 @@ const gameController = (() => {
 	let enemyPlayer;
 	let gameStage = 'select';
 	let winner;
+	let bothHuman;
 
 	const getGameState = () => {
-		return { player1, player2, currentPlayer, gameStage, winner };
+		return {
+			player1,
+			player2,
+			currentPlayer,
+			gameStage,
+			winner,
+			bothHuman,
+		};
 	};
 
 	const createShipyard = (ships) => {
@@ -41,6 +49,12 @@ const gameController = (() => {
 
 		currentPlayer = player1;
 		enemyPlayer = player2;
+
+		if (player1.getType() == 'human' && player2.getType() == 'human') {
+			bothHuman = true;
+		} else {
+			bothHuman = false;
+		}
 	};
 
 	const gameOverCheck = () => {

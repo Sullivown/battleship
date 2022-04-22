@@ -49,9 +49,9 @@ const displayController = (() => {
 		gameArea.appendChild(selectScreen());
 	};
 
-	const renderPlacement = (player) => {
+	const renderPlacement = (data) => {
 		gameArea.innerHTML = '';
-		gameArea.appendChild(renderPlacementScreen(player));
+		gameArea.appendChild(renderPlacementScreen(data));
 	};
 
 	const renderBattle = (state) => {
@@ -66,18 +66,27 @@ const displayController = (() => {
 
 	// PubSub
 	PubSub.subscribe('GAME STATE CHANGED', (msg, data) => {
-		const { currentPlayer, player1, player2, gameStage, winner } = data;
+		const {
+			currentPlayer,
+			player1,
+			player2,
+			gameStage,
+			winner,
+			bothHuman,
+		} = data;
+
 		if (gameStage == 'select') {
 			renderSelectScreen();
 		}
 		if (gameStage == 'placement') {
-			renderPlacement(currentPlayer);
+			renderPlacement(data);
 			PubSub.publish('PLACEMENT SCREEN RENDERED');
 		}
 		if (gameStage == 'battle') {
 			const state = {
 				currentPlayer,
 				enemyPlayer: getEnemyPlayer(currentPlayer, player1, player2),
+				bothHuman,
 			};
 			renderBattle(state);
 			PubSub.publish('BATTLE SCREEN RENDERED');

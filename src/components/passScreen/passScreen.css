@@ -1,0 +1,20 @@
+#pass-screen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	font-size: 1.2rem;
+	line-height: 2rem;
+	border: 1px solid black;
+	border-radius: 1rem;
+	background-color: #515a6b;
+	color: white;
+	z-index: 1;
+}
+
+#dismiss-btn {
+	background-color: white;
+	color: black;
+}

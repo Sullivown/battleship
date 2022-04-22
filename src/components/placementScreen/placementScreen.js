@@ -1,15 +1,16 @@
 import playerBoard from '../boards/playerBoard';
 import shipyard from './shipyard';
+import renderPassScreen from '../passScreen/passScreen';
 import emptyShipyardCheck from '../../helpers/emptyShipyardCheck';
 import './placementScreen.css';
 
 let selectedShip = { shipId: null, verticalAlignment: false, onBoard: false };
 
-function renderPlacementScreen(player) {
+function renderPlacementScreen(data) {
 	selectedShip = resetSelectedShip();
-	const playerName = player.getName();
-	const playerBoardState = player.board.getBoard();
-	const playerShipyard = player.shipyard;
+	const playerName = data.currentPlayer.getName();
+	const playerBoardState = data.currentPlayer.board.getBoard();
+	const playerShipyard = data.currentPlayer.shipyard;
 
 	const msgBox = document.querySelector('#msgbox');
 	msgBox.classList.remove('warning-message');
@@ -19,6 +20,10 @@ function renderPlacementScreen(player) {
 
 	const placementScreen = document.createElement('div');
 	placementScreen.classList.add('flex-column');
+
+	if (data.bothHuman && !playerShipyard.includes(null)) {
+		placementScreen.appendChild(renderPassScreen(playerName));
+	}
 
 	const boardsDiv = document.createElement('div');
 	boardsDiv.classList.add('flex-row', 'flex-wrap', 'boards-div');

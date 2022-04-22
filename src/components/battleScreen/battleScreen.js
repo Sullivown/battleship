@@ -1,5 +1,6 @@
 import playerBoard from '../boards/playerBoard';
 import enemyBoard from '../boards/enemyBoard';
+import renderPassScreen from '../passScreen/passScreen';
 import './battleScreen.css';
 
 function renderBattleScreen(state) {
@@ -14,15 +15,36 @@ function renderBattleScreen(state) {
 	const battleScreen = document.createElement('div');
 	battleScreen.classList.add('flex-column');
 
+	if (state.bothHuman) {
+		console.log('Both human!');
+		battleScreen.appendChild(renderPassScreen(currentPlayerName));
+	}
+
 	const boardsDiv = document.createElement('div');
 	boardsDiv.classList.add('flex-row', 'flex-wrap', 'boards-div');
 	battleScreen.appendChild(boardsDiv);
 
+	const boardSection1 = document.createElement('div');
+	boardSection1.classList.add('flex-column');
+	boardsDiv.appendChild(boardSection1);
+
+	const currentPlayerTitle = document.createElement('h2');
+	currentPlayerTitle.textContent = 'Your Board';
+	boardSection1.appendChild(currentPlayerTitle);
+
 	const playerBoardDiv = playerBoard(playerBoardState);
-	boardsDiv.appendChild(playerBoardDiv);
+	boardSection1.appendChild(playerBoardDiv);
+
+	const boardSection2 = document.createElement('div');
+	boardSection2.classList.add('flex-column');
+	boardsDiv.appendChild(boardSection2);
+
+	const enemyPlayerTitle = document.createElement('h2');
+	enemyPlayerTitle.textContent = 'Enemy Board';
+	boardSection2.appendChild(enemyPlayerTitle);
 
 	const enemyBoardDiv = enemyBoard(enemyBoardState);
-	boardsDiv.appendChild(enemyBoardDiv);
+	boardSection2.appendChild(enemyBoardDiv);
 
 	return battleScreen;
 }
