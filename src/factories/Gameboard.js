@@ -63,7 +63,9 @@ function Gameboard(boardSize) {
 	};
 
 	const receiveAttack = (coordinates) => {
+		console.log(coordinates);
 		const cell = board[coordinates.x][coordinates.y];
+		console.log(cell);
 		cell.shotFired = true;
 
 		if (cell.ship) {

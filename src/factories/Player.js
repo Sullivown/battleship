@@ -8,7 +8,17 @@ function Player(name, type) {
 	let board;
 	let shipyard;
 
-	const validAttack = (coordinates) => {
+	const validAttack = (coordinates, boardSize) => {
+		// If coordinates are out of board range, return false
+		if (
+			coordinates.x >= boardSize ||
+			coordinates.y >= boardSize ||
+			coordinates.x < 0 ||
+			coordinates.y < 0
+		) {
+			return false;
+		}
+		// If coordinates have already been attacked, return false
 		const found = movesMade.find(
 			(element) =>
 				element.x == coordinates.x && element.y == coordinates.y
@@ -20,7 +30,9 @@ function Player(name, type) {
 		}
 	};
 	const attack = (enemyPlayer, coordinates) => {
-		if (validAttack(coordinates)) {
+		const boardSize = enemyPlayer.board.getBoard().length;
+
+		if (validAttack(coordinates, boardSize)) {
 			enemyPlayer.board.receiveAttack(coordinates);
 			movesMade.push(coordinates);
 
@@ -45,13 +57,12 @@ function Player(name, type) {
 			if (!enemyBoard[hit.x][hit.y].ship.isSunk())
 				for (let i = -1; i < 2; i++) {
 					for (let j = -1; j < 2; j++) {
-						const x = parseInt(hit.x) + i;
-						const y = parseInt(hit.y) + j;
-
 						// Only explore orthogonal coordinates (no diagonals)
 						if (i - j == 1 || i - j == -1) {
+							const x = parseInt(hit.x) + i;
+							const y = parseInt(hit.y) + j;
 							const tempCoordinates = { x, y };
-							if (validAttack(tempCoordinates)) {
+							if (validAttack(tempCoordinates, boardSize)) {
 								coordinates = tempCoordinates;
 							}
 						}
