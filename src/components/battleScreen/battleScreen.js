@@ -16,7 +16,6 @@ function renderBattleScreen(state) {
 	battleScreen.classList.add('flex-column');
 
 	if (state.bothHuman) {
-		console.log('Both human!');
 		battleScreen.appendChild(renderPassScreen(currentPlayerName));
 	}
 
